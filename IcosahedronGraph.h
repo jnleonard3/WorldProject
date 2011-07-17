@@ -15,8 +15,10 @@ public:
 	IcosahedronGraph(double radius);
 	~IcosahedronGraph();
 
-	VertexNode& getVertexNode(int node);
-	FaceNode& getFaceNode(int node);
+	VertexNode& getVertexNode(unsigned int node);
+	FaceNode& getFaceNode(unsigned int node);
+
+	unsigned int getVertexNodeIndex(const VertexNode* node);
 
 private:
 	VertexNode rootVertexNode;

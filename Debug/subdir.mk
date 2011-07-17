@@ -6,6 +6,7 @@
 CPP_SRCS += \
 ../CommonGeometry.cpp \
 ../Graph.cpp \
+../IcosahedronDrawer.cpp \
 ../IcosahedronGraph.cpp \
 ../Plane.cpp \
 ../main.cpp 
@@ -13,6 +14,7 @@ CPP_SRCS += \
 OBJS += \
 ./CommonGeometry.o \
 ./Graph.o \
+./IcosahedronDrawer.o \
 ./IcosahedronGraph.o \
 ./Plane.o \
 ./main.o 
@@ -20,6 +22,7 @@ OBJS += \
 CPP_DEPS += \
 ./CommonGeometry.d \
 ./Graph.d \
+./IcosahedronDrawer.d \
 ./IcosahedronGraph.d \
 ./Plane.d \
 ./main.d 

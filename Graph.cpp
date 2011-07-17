@@ -6,14 +6,16 @@
  */
 
 #include "Graph.h"
+#include <iostream>
 
 VertexNode::VertexNode(unsigned int numConnected, Point vertex):numberConnected(0) {
 	this->vertex = vertex;
-	connectedNodes = new VertexNode*[numberConnected];
+	connectedNodes = new VertexNode*[numConnected];
 }
 
 void VertexNode::setConnected(VertexNode* node) {
 	connectedNodes[numberConnected] = node;
+	numberConnected++;
 }
 
 VertexNode* VertexNode::getConnected(int index) {
@@ -28,12 +30,13 @@ TriangleElement::TriangleElement(VertexNode* first, VertexNode* second, VertexNo
 }
 
 FaceNode::FaceNode(unsigned int numConnected, TriangleElement triangle):numberConnected(0) {
-	this->element = element;
-	connectedNodes = new FaceNode*[numberConnected];
+	this->element = triangle;
+	connectedNodes = new FaceNode*[numConnected];
 }
 
 void FaceNode::setConnected(FaceNode* node) {
 	connectedNodes[numberConnected] = node;
+	numberConnected++;
 }
 
 FaceNode* FaceNode::getConnected(int index) {

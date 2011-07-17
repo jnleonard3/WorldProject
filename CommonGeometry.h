@@ -16,8 +16,8 @@ public:
 	double x() const { return xVal; };
 	void x(double x){ xVal = x; };
 
-	double y() const { return xVal; };
-	void y(double y){ xVal = y; };
+	double y() const { return yVal; };
+	void y(double y){ yVal = y; };
 
 	double z() const { return zVal; };
 	void z(double z){ zVal = z; };

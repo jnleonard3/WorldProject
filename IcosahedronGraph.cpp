@@ -8,6 +8,7 @@
 #include "IcosahedronGraph.h"
 
 #include "math.h"
+#include <iostream>
 
 IcosahedronGraph::IcosahedronGraph(double radius) {
 
@@ -266,7 +267,11 @@ IcosahedronGraph::IcosahedronGraph(double radius) {
 
 }
 
-VertexNode& IcosahedronGraph::getVertexNode(int node) {
+IcosahedronGraph::~IcosahedronGraph() {
+
+}
+
+VertexNode& IcosahedronGraph::getVertexNode(unsigned int node) {
 	if(node == 0) {
 		return rootVertexNode;
 	} else {
@@ -274,10 +279,20 @@ VertexNode& IcosahedronGraph::getVertexNode(int node) {
 	}
 }
 
-FaceNode& IcosahedronGraph::getFaceNode(int node) {
+FaceNode& IcosahedronGraph::getFaceNode(unsigned int node) {
 	if(node == 0) {
 		return rootFaceNode;
 	} else {
 		return faceNodes[node-1];
 	}
+}
+
+unsigned int IcosahedronGraph::getVertexNodeIndex(const VertexNode* node) {
+	for(int i = 0; i < 12; ++i) {
+		if(node == &getVertexNode(i)) {
+
+			return i;
+		}
+	}
+	return 12;
 }
