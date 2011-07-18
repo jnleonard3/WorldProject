@@ -46,7 +46,9 @@
 								<option id="gnu.cpp.link.option.libs.431395782" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="osg"/>
 									<listOptionValue builtIn="false" value="osgViewer"/>
+									<listOptionValue builtIn="false" value="osgDB"/>
 									<listOptionValue builtIn="false" value="osgGA"/>
+									<listOptionValue builtIn="false" value="osgText"/>
 									<listOptionValue builtIn="false" value="OpenThreads"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.575751766" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

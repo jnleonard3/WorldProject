@@ -8,7 +8,9 @@ CPP_SRCS += \
 ../Graph.cpp \
 ../IcosahedronDrawer.cpp \
 ../IcosahedronGraph.cpp \
+../MessageLogger.cpp \
 ../Plane.cpp \
+../TextBox.cpp \
 ../main.cpp 
 
 OBJS += \
@@ -16,7 +18,9 @@ OBJS += \
 ./Graph.o \
 ./IcosahedronDrawer.o \
 ./IcosahedronGraph.o \
+./MessageLogger.o \
 ./Plane.o \
+./TextBox.o \
 ./main.o 
 
 CPP_DEPS += \
@@ -24,7 +28,9 @@ CPP_DEPS += \
 ./Graph.d \
 ./IcosahedronDrawer.d \
 ./IcosahedronGraph.d \
+./MessageLogger.d \
 ./Plane.d \
+./TextBox.d \
 ./main.d 
 
 

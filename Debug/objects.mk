@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -losg -losgViewer -losgGA -lOpenThreads
+LIBS := -losg -losgViewer -losgDB -losgGA -losgText -lOpenThreads
 

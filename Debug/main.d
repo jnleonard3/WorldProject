@@ -166,7 +166,16 @@ main.d main.o: ../main.cpp \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgGA/OrbitManipulator \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgGA/StandardManipulator \
  ../IcosahedronGraph.h ../Graph.h ../CommonGeometry.h \
- ../IcosahedronDrawer.h
+ ../IcosahedronDrawer.h ../MessageLogger.h \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Text \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/TextBase \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/String \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Export \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/KerningType \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Font \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/TexEnv \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Glyph \
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Style
 
 /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/Node:
 
@@ -507,3 +516,23 @@ main.d main.o: ../main.cpp \
 ../CommonGeometry.h:
 
 ../IcosahedronDrawer.h:
+
+../MessageLogger.h:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Text:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/TextBase:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/String:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Export:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/KerningType:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Font:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/TexEnv:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Glyph:
+
+/home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgText/Style:
