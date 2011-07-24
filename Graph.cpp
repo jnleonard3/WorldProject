@@ -22,14 +22,14 @@ VertexNode* VertexNode::getConnected(int index) {
 	return connectedNodes[index];
 }
 
-TriangleElement::TriangleElement(VertexNode* first, VertexNode* second, VertexNode* third)
-:triangle(first->getPoint(), second->getPoint(), third->getPoint()) {
+TriangleElement::TriangleElement(unsigned int levelOfDetail, VertexNode* first, VertexNode* second, VertexNode* third)
+:triangle(first->getPoint(), second->getPoint(), third->getPoint()),skin(levelOfDetail, Triangle(triangle.firstPoint().distance(triangle.secondPoint()))) {
 	relatedNodes[0] = first;
 	relatedNodes[1] = second;
 	relatedNodes[2] = third;
 }
 
-FaceNode::FaceNode(unsigned int numConnected, TriangleElement triangle):numberConnected(0) {
+FaceNode::FaceNode(unsigned int numConnected, TriangleElement triangle):numberConnected(0){
 	this->element = triangle;
 	connectedNodes = new FaceNode*[numConnected];
 }

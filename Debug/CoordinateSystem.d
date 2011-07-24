@@ -1,5 +1,5 @@
-CommonGeometry.d CommonGeometry.o: ../CommonGeometry.cpp \
- ../CommonGeometry.h ../MessageLogger.h \
+CoordinateSystem.d CoordinateSystem.o: ../CoordinateSystem.cpp \
+ ../CoordinateSystem.h ../CommonGeometry.h ../MessageLogger.h \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/Group \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/Node \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/Object \
@@ -105,7 +105,10 @@ CommonGeometry.d CommonGeometry.o: ../CommonGeometry.cpp \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgDB/ReaderWriter \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgDB/FileCache \
  /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgDB/DatabaseRevisions \
- /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/ObserverNodePath
+ /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/ObserverNodePath \
+ ../CoordinatePoint.h
+
+../CoordinateSystem.h:
 
 ../CommonGeometry.h:
 
@@ -322,3 +325,5 @@ CommonGeometry.d CommonGeometry.o: ../CommonGeometry.cpp \
 /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osgDB/DatabaseRevisions:
 
 /home/Jon/Downloads/OpenSceneGraph-3.0.0/include/osg/ObserverNodePath:
+
+../CoordinatePoint.h:

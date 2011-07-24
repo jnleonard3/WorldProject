@@ -7,10 +7,13 @@
 
 #include "IcosahedronGraph.h"
 
+#include "CoordinatePoint.h"
+
 #include "math.h"
 #include <iostream>
 
-IcosahedronGraph::IcosahedronGraph(double radius) {
+IcosahedronGraph::IcosahedronGraph(unsigned int lod, double radius):
+levelOfDetail(lod),space(*this){
 
 	double sideLength = (4.0/sqrt(10.0+2.0*sqrt(5.0))) * radius;
 	double sideLengthHalf = sideLength/2.0;
@@ -104,84 +107,84 @@ IcosahedronGraph::IcosahedronGraph(double radius) {
 	getVertexNode(11).setConnected(&getVertexNode(7));
 	getVertexNode(11).setConnected(&getVertexNode(10));
 
-	rootFaceNode = FaceNode(3, TriangleElement( &getVertexNode(0),
+	rootFaceNode = FaceNode(3, TriangleElement(lod, &getVertexNode(0),
 												&getVertexNode(1),
 												&getVertexNode(8)));
 
 	faceNodes = new FaceNode[19];
-	faceNodes[0] = FaceNode(3, TriangleElement( &getVertexNode(0),
+	faceNodes[0] = FaceNode(3, TriangleElement(lod, &getVertexNode(0),
 												&getVertexNode(1),
 												&getVertexNode(10)));
 
-	faceNodes[1] = FaceNode(3, TriangleElement( &getVertexNode(2),
+	faceNodes[1] = FaceNode(3, TriangleElement(lod, &getVertexNode(2),
 												&getVertexNode(3),
 												&getVertexNode(9)));
 
-	faceNodes[2] = FaceNode(3, TriangleElement( &getVertexNode(2),
+	faceNodes[2] = FaceNode(3, TriangleElement(lod, &getVertexNode(2),
 												&getVertexNode(3),
 												&getVertexNode(11)));
 
-	faceNodes[3] = FaceNode(3, TriangleElement( &getVertexNode(4),
+	faceNodes[3] = FaceNode(3, TriangleElement(lod, &getVertexNode(4),
 												&getVertexNode(5),
 												&getVertexNode(0)));
 
-	faceNodes[4] = FaceNode(3, TriangleElement( &getVertexNode(4),
+	faceNodes[4] = FaceNode(3, TriangleElement(lod, &getVertexNode(4),
 												&getVertexNode(5),
 												&getVertexNode(2)));
 
-	faceNodes[5] = FaceNode(3, TriangleElement( &getVertexNode(6),
+	faceNodes[5] = FaceNode(3, TriangleElement(lod, &getVertexNode(6),
 												&getVertexNode(7),
 												&getVertexNode(1)));
 
-	faceNodes[6] = FaceNode(3, TriangleElement( &getVertexNode(6),
+	faceNodes[6] = FaceNode(3, TriangleElement(lod, &getVertexNode(6),
 												&getVertexNode(7),
 												&getVertexNode(3)));
 
-	faceNodes[7] = FaceNode(3, TriangleElement( &getVertexNode(8),
+	faceNodes[7] = FaceNode(3, TriangleElement(lod, &getVertexNode(8),
 												&getVertexNode(9),
 												&getVertexNode(4)));
 
-	faceNodes[8] = FaceNode(3, TriangleElement( &getVertexNode(8),
+	faceNodes[8] = FaceNode(3, TriangleElement(lod, &getVertexNode(8),
 												&getVertexNode(9),
 												&getVertexNode(6)));
 
-	faceNodes[9] = FaceNode(3, TriangleElement( &getVertexNode(10),
+	faceNodes[9] = FaceNode(3, TriangleElement(lod, &getVertexNode(10),
 												&getVertexNode(11),
 												&getVertexNode(5)));
 
-	faceNodes[10] = FaceNode(3, TriangleElement( &getVertexNode(10),
+	faceNodes[10] = FaceNode(3, TriangleElement(lod, &getVertexNode(10),
 												 &getVertexNode(11),
 												 &getVertexNode(7)));
 
-	faceNodes[11] = FaceNode(3, TriangleElement( &getVertexNode(0),
+	faceNodes[11] = FaceNode(3, TriangleElement(lod, &getVertexNode(0),
 												 &getVertexNode(4),
 												 &getVertexNode(8)));
 
-	faceNodes[12] = FaceNode(3, TriangleElement( &getVertexNode(0),
+	faceNodes[12] = FaceNode(3, TriangleElement(lod, &getVertexNode(0),
 												 &getVertexNode(5),
 												 &getVertexNode(10)));
 
-	faceNodes[13] = FaceNode(3, TriangleElement( &getVertexNode(1),
+	faceNodes[13] = FaceNode(3, TriangleElement(lod, &getVertexNode(1),
 												 &getVertexNode(6),
 												 &getVertexNode(8)));
 
-	faceNodes[14] = FaceNode(3, TriangleElement( &getVertexNode(1),
+	faceNodes[14] = FaceNode(3, TriangleElement(lod, &getVertexNode(1),
 												 &getVertexNode(7),
 												 &getVertexNode(10)));
 
-	faceNodes[15] = FaceNode(3, TriangleElement( &getVertexNode(2),
+	faceNodes[15] = FaceNode(3, TriangleElement(lod, &getVertexNode(2),
 												 &getVertexNode(4),
 												 &getVertexNode(9)));
 
-	faceNodes[16] = FaceNode(3, TriangleElement( &getVertexNode(2),
+	faceNodes[16] = FaceNode(3, TriangleElement(lod, &getVertexNode(2),
 												 &getVertexNode(5),
 												 &getVertexNode(11)));
 
-	faceNodes[17] = FaceNode(3, TriangleElement( &getVertexNode(3),
+	faceNodes[17] = FaceNode(3, TriangleElement(lod, &getVertexNode(3),
 												 &getVertexNode(7),
 												 &getVertexNode(11)));
 
-	faceNodes[18] = FaceNode(3, TriangleElement( &getVertexNode(3),
+	faceNodes[18] = FaceNode(3, TriangleElement(lod, &getVertexNode(3),
 												 &getVertexNode(6),
 												 &getVertexNode(9)));
 
@@ -265,6 +268,10 @@ IcosahedronGraph::IcosahedronGraph(double radius) {
 	getFaceNode(19).setConnected(&getFaceNode(7));
 	getFaceNode(19).setConnected(&getFaceNode(9));
 
+	for(int i = 0; i < 20; ++i) {
+		verifyCounterwiseTriangle(getFaceNode(i));
+	}
+
 }
 
 IcosahedronGraph::~IcosahedronGraph() {
@@ -290,9 +297,52 @@ FaceNode& IcosahedronGraph::getFaceNode(unsigned int node) {
 unsigned int IcosahedronGraph::getVertexNodeIndex(const VertexNode* node) {
 	for(int i = 0; i < 12; ++i) {
 		if(node == &getVertexNode(i)) {
-
 			return i;
 		}
 	}
 	return 12;
+}
+
+const char * IcosahedronGraph::IcosahedronCoordinateSpace::name = "IcosahedronCoordinateSpace";
+
+CoordinatePoint IcosahedronGraph::IcosahedronCoordinateSpace::actualConvertTo(const CoordinateSystem& toSystem, const CoordinatePoint& thisPoint) const {
+	if(toSystem.getId() == this->getId()) {
+		for(unsigned int i = 0; i < 20; ++i) {
+			FaceNode& node = graph.getFaceNode(i);
+			if(node.getTriangle().skin.getCoordinateSpace().getId() == thisPoint.getCoordinateSystem().getId()) {
+				Triangle tri = node.getTriangle().triangle;
+				Vector midBottom(tri.secondPoint(),tri.thirdPoint());
+				midBottom = midBottom.scale(0.5);
+				Point bottomMidPoint = midBottom.translate(tri.secondPoint());
+				Vector midVector(bottomMidPoint,tri.firstPoint());
+				midVector = midVector.scale(0.33333);
+				Point midPoint = midVector.translate(bottomMidPoint);
+				midBottom = midBottom.normalize();
+				midVector = midVector.normalize();
+				Vector norm = midVector.crossProduct(midBottom);
+				midBottom = midBottom.scale(thisPoint.getPoint().x());
+				midVector = midVector.scale(thisPoint.getPoint().y());
+				norm = norm.scale(thisPoint.getPoint().z());
+				Point newPoint = midBottom.translate(midVector.translate(norm.translate(midPoint)));
+				return CoordinatePoint(newPoint,*this,this->isValid(newPoint));
+			}
+		}
+	}
+	return CoordinatePoint(Point(0,0,0),toSystem,false);
+}
+
+void IcosahedronGraph::verifyCounterwiseTriangle(FaceNode& node) const {
+	Triangle tri = node.getTriangle().triangle;
+	Vector centerVec(Point(0,0,0),tri.center());
+	centerVec = centerVec.normalize();
+	Vector norm = tri.normal().normalize();
+	bool equals = centerVec.equals(norm,0.001);
+	if(equals) {
+		Point pt = tri.secondPoint();
+		node.getTriangle().triangle.secondPoint(tri.thirdPoint());
+		node.getTriangle().triangle.thirdPoint(pt);
+		VertexNode* vertex = node.getTriangle().relatedNodes[1];
+		node.getTriangle().relatedNodes[1] = node.getTriangle().relatedNodes[0];
+		node.getTriangle().relatedNodes[0] = vertex;
+	}
 }

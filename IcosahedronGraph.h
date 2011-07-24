@@ -12,7 +12,7 @@
 
 class IcosahedronGraph {
 public:
-	IcosahedronGraph(double radius);
+	IcosahedronGraph(unsigned int levelOfDetail, double radius);
 	~IcosahedronGraph();
 
 	VertexNode& getVertexNode(unsigned int node);
@@ -20,7 +20,33 @@ public:
 
 	unsigned int getVertexNodeIndex(const VertexNode* node);
 
+	CoordinateSystem& getCoordinateSystem() { return space; };
+
 private:
+	class IcosahedronCoordinateSpace : public CoordinateSystem {
+	public:
+		IcosahedronCoordinateSpace(IcosahedronGraph& grph):graph(grph){};
+
+		virtual const char * getName() const { return name; };
+
+		virtual bool isValid(const Point& pt) const {
+			return true;
+		}
+	protected:
+		virtual CoordinatePoint actualConvertTo(const CoordinateSystem& toSystem, const CoordinatePoint& thisPoint) const;
+
+	private:
+		static const char * name;
+
+		IcosahedronGraph& graph;
+	};
+
+	void verifyCounterwiseTriangle(FaceNode& node) const;
+
+	unsigned int levelOfDetail;
+
+	IcosahedronCoordinateSpace space;
+
 	VertexNode rootVertexNode;
 	VertexNode *vertexNodes;
 

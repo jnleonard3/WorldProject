@@ -17,6 +17,7 @@
 #include <osgDB/ReadFile>
 
 #include "MessageLogger.h"
+#include <iostream>
 
 IcosahedronDrawer::IcosahedronDrawer() {
 }
@@ -24,80 +25,116 @@ IcosahedronDrawer::IcosahedronDrawer() {
 IcosahedronDrawer::~IcosahedronDrawer() {
 }
 
+struct PointVertex {
+	PointVertex(unsigned int r, unsigned int c, unsigned int i)
+	:row(r),col(c),index(i){};
+	unsigned int row, col, index;
+};
+
 osg::Group* IcosahedronDrawer::drawIcosahedron(IcosahedronGraph &shape) {
 
 	MessageLogger::print("Building Icosahedron.");
 	osg::Group* root = new osg::Group();
-	osg::Geode* icosahedronGeode = new osg::Geode();
-	osg::Geometry* icosahedronGeometry = new osg::Geometry();
 
-	icosahedronGeode->addDrawable(icosahedronGeometry);
-	root->addChild(icosahedronGeode);
-
-	osg::Vec3Array* vertices = new osg::Vec3Array;
-	for(int i = 0; i < 12; ++i) {
-		Point pt = shape.getVertexNode(i).getPoint();
-		vertices->push_back(osg::Vec3(pt.x(), pt.y(), pt.z()));
-	}
-	icosahedronGeometry->setVertexArray(vertices);
-
-	for(int i = 0; i < 20; ++i) {
-		TriangleElement elem = shape.getFaceNode(i).getTriangle();
-		osg::DrawElementsUInt* tri = new osg::DrawElementsUInt(
-				osg::PrimitiveSet::TRIANGLES, 0);
-		tri->push_back(shape.getVertexNodeIndex(elem.relatedNodes[0]));
-		tri->push_back(shape.getVertexNodeIndex(elem.relatedNodes[1]));
-		tri->push_back(shape.getVertexNodeIndex(elem.relatedNodes[2]));
-		icosahedronGeometry->addPrimitiveSet(tri);
+	osg::Vec4Array* colors = new osg::Vec4Array;
+	for(unsigned int i = 0; i <= 1000; i++) {
+		colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
 	}
 
-    osg::Vec4Array* colors = new osg::Vec4Array;
-    colors->push_back(osg::Vec4(0.0f, 1.0f, 1.0f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 1.0f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 0.0f, 1.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 0.5f, 0.5f, 0.5f) );
-    colors->push_back(osg::Vec4(0.5f, 0.5f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.5f, 0.0f, 0.5f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 1.0f, 0.5f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 0.5f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 0.0f, 0.5f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 0.5f, 1.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.5f, 1.0f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.5f, 0.0f, 1.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 0.25f, 0.25f, 0.5f) );
-    colors->push_back(osg::Vec4(0.25f, 0.25f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.25f, 0.0f, 0.25f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 1.0f, 0.25f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 0.25f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(1.0f, 0.0f, 0.25f, 0.5f) );
-    colors->push_back(osg::Vec4(0.0f, 0.25f, 1.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.25f, 1.0f, 0.0f, 0.5f) );
-    colors->push_back(osg::Vec4(0.25f, 0.0f, 1.0f, 0.5f) );
+	unsigned int trianglesRendered = 0;
 
-    icosahedronGeometry->setColorArray(colors);
-    icosahedronGeometry->setColorBinding(osg::Geometry::BIND_PER_PRIMITIVE);
+	for (int i = 0; i < 20; ++i) {
+		osg::Geode* icosahedronGeode = new osg::Geode();
+		osg::Geometry* icosahedronGeometry = new osg::Geometry();
 
-    osg::Material *material = new osg::Material();
-    material->setEmission(osg::Material::FRONT, osg::Vec4(0.8, 0.8, 0.8, 1.0));
+		icosahedronGeode->addDrawable(icosahedronGeometry);
+		root->addChild(icosahedronGeode);
 
-    osg::Image *image = osgDB::readImageFile("Dirttexture.jpg");
-    if (!image) {
-    	std::cout << "Couldn't load texture." << std::endl;
-    	return NULL;
-    }
+		osg::Vec3Array* vertices = new osg::Vec3Array;
+		TriangleTerrainSkin skin = shape.getFaceNode(i).getTriangle().skin;
 
-    osg::Texture2D *texture = new osg::Texture2D;
-    texture->setDataVariance(osg::Object::DYNAMIC);
-    texture->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR);
-    texture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
-    texture->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP);
-    texture->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP);
-    texture->setImage(image);
+		std::vector<unsigned int> offsetCountSum;
+		for (unsigned int y = 0; y < skin.getYOffsetCount(); ++y) {
+			std::cout << skin.getCoordinatePoint(0, y).getPoint().y() << ": ";
+			for (unsigned int x = 0; x < skin.getXOffsetCount(y); ++x) {
+				CoordinatePoint pt = skin.getCoordinatePoint(x, y);
+				Point pt2 = shape.getCoordinateSystem().convertTo(shape.getCoordinateSystem(), pt).getPoint();
+				vertices->push_back(osg::Vec3(pt2.x(), pt2.y(), pt2.z()));
+				std::cout << pt2.x() << ", ";
+			}
+			std::cout << "\n";
+			if(offsetCountSum.size() == 0) {
+				offsetCountSum.push_back(0);
+			} else {
+				offsetCountSum.push_back(offsetCountSum.at(y-1)+skin.getXOffsetCount(y-1));
+			}
+		}
+		icosahedronGeometry->setVertexArray(vertices);
 
-    osg::StateSet *stateSet = icosahedronGeode->getOrCreateStateSet();
-    stateSet->ref();
-    stateSet->setAttribute(material);
-    stateSet->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
-    MessageLogger::print("Building Icosahedron Complete.");
-    return root;
+		for(unsigned int y = 0; y < (skin.getYOffsetCount()-1); ++y) {
+			for(unsigned int x = 0; x < skin.getXOffsetCount(y); ++x) {
+				Point pt = skin.getVertex(x,y);
+				bool triangleFound = false;
+				for(unsigned int v = y+1; v < skin.getYOffsetCount(); ++v) {
+					for(unsigned int u = 0; u < skin.getXOffsetCount(y)-1; ++u) {
+						Point pt2 = skin.getVertex(u,v);
+						if(pt.x() < pt2.x()) {
+							Point pt3 = skin.getVertex(u+1,v);
+							if(pt.x() > pt3.x()) {
+								osg::DrawElementsUInt* vert = new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLES, 0);
+								vert->push_back(offsetCountSum.at(y)+x);
+								vert->push_back(offsetCountSum.at(v)+u);
+								vert->push_back(offsetCountSum.at(v)+u+1);
+								icosahedronGeometry->addPrimitiveSet(vert);
+								trianglesRendered++;
+								triangleFound = true;
+								break;
+							}
+						}
+					}
+					if(triangleFound) {
+						triangleFound = false;
+						break;
+					}
+				}
+
+				if(x < (skin.getXOffsetCount(y)-1)) {
+					Point pt2 = skin.getVertex(x+1,y);
+					for(unsigned int v = y+1; v < skin.getYOffsetCount(); ++v) {
+						for(unsigned int u = 0; u < skin.getXOffsetCount(y); ++u) {
+							Point pt3 = skin.getVertex(u,v);
+							if(pt3.x() < pt.x() && pt3.x() > pt2.x()) {
+									osg::DrawElementsUInt* vert = new osg::DrawElementsUInt(osg::PrimitiveSet::TRIANGLES, 0);
+									vert->push_back(offsetCountSum.at(y)+x);
+									vert->push_back(offsetCountSum.at(y)+x+1);
+									vert->push_back(offsetCountSum.at(v)+u);
+									icosahedronGeometry->addPrimitiveSet(vert);
+									triangleFound = true;
+									break;
+							}
+						}
+						if(triangleFound) {
+							triangleFound = false;
+							break;
+						}
+					}
+				}
+			}
+		}
+/*
+		osg::DrawElementsUInt* vert = new osg::DrawElementsUInt(
+				osg::PrimitiveSet::LINE_STRIP, 0);
+		for(unsigned int j = 0; j < vertices->size();++j) {
+			vert->push_back(j);
+		}
+		//icosahedronGeometry->addPrimitiveSet(vert);
+*/
+		icosahedronGeometry->setColorArray(colors);
+		icosahedronGeometry->setColorBinding(osg::Geometry::BIND_PER_PRIMITIVE);
+	}
+	MessageLogger::getInstance() << "Rendered " << trianglesRendered << " triangles.\n";
+	MessageLogger::print("Building Icosahedron Complete.");
+	return root;
 }

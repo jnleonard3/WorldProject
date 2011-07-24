@@ -33,11 +33,10 @@ public:
 
 	virtual void update(osg::NodeVisitor*, osg::Drawable*)
 	{
-		frameSkip++;
-		if(frameSkip > 500) {
+		if(frameSkip == 0) {
 			MessageNode *mNode = rootMessageNode;
 			unsigned int size =
-					MessageLogger::getInstance()->getMessageBufferSize();
+					MessageLogger::getInstance().getMessageBufferSize();
 			std::string string = "";
 
 			while (mNode != 0 && size > 0) {
@@ -63,6 +62,9 @@ public:
 				}
 			}
 			text->setText(string);
+		}
+		frameSkip++;
+		if(frameSkip > 50) {
 			frameSkip = 0;
 		}
 	}
@@ -73,23 +75,57 @@ private:
 	osgText::Text *&text;
 };
 
-MessageLogger* MessageLogger::getInstance() {
+MessageLogger& MessageLogger::getInstance() {
 	if(instance == 0) {
 		instance = new MessageLogger();
 	}
-	return instance;
+	return *instance;
 }
 
 void MessageLogger::print(std::string msg) {
-	MessageLogger::getInstance()->printMessage(msg);
+	MessageLogger::getInstance().printMessage(msg);
 }
 
 osg::Group* MessageLogger::getGroup() {
-	return MessageLogger::getInstance()->textGroup;
+	return MessageLogger::getInstance().textGroup;
 }
 
 unsigned int MessageLogger::getMessageBufferSize() {
 	return messageBufferSize;
+}
+
+MessageLogger& MessageLogger::operator<< (bool val) {
+	if(val) {
+		bufferMsg += "1";
+	} else {
+		bufferMsg += "0";
+	}
+	return *this;
+}
+
+MessageLogger& MessageLogger::operator<< (unsigned int val) {
+	std::stringstream stream;
+	stream << val;
+	bufferMsg += stream.str();
+	return *this;
+}
+
+MessageLogger& MessageLogger::operator<< (double val) {
+	std::stringstream stream;
+	stream << val;
+	bufferMsg += stream.str();
+	return *this;
+}
+
+MessageLogger& MessageLogger::operator<< (const char * val) {
+	bufferMsg += std::string(val);
+	size_t pos = bufferMsg.find_first_of('\n',0);
+	while(pos != std::string::npos) {
+		printMessage(bufferMsg.substr(0,pos));
+		bufferMsg = bufferMsg.substr(pos+1);
+		pos = bufferMsg.find_first_of('\n',0);
+	}
+	return *this;
 }
 
 MessageLogger::MessageLogger():
@@ -101,7 +137,7 @@ MessageLogger::MessageLogger():
 {
     text->setFont("VeraSe.ttf");
     text->setCharacterSize(14.0);
-    messageBufferSize = (1060/text->getCharacterHeight());
+    messageBufferSize = (900/text->getCharacterHeight());
 
     text->setPosition(osg::Vec3(10,10+messageBufferSize*text->getCharacterHeight(),0));
 

@@ -18,13 +18,18 @@ struct MessageNode;
 
 class MessageLogger {
 public:
-	static MessageLogger* getInstance();
+	static MessageLogger& getInstance();
 
 	static void print(std::string msg);
 
 	static osg::Group* getGroup();
 
 	unsigned int getMessageBufferSize();
+
+	MessageLogger& operator<< (bool val);
+	MessageLogger& operator<< (unsigned int val);
+	MessageLogger& operator<< (double val);
+	MessageLogger& operator<< (const char * val);
 
 private:
 	static MessageLogger* instance;
@@ -39,6 +44,8 @@ private:
 	osg::Geode* textGeode;
 
 	osgText::Text* text;
+
+	std::string bufferMsg;
 
 	MessageNode* rootMessageNode;
 

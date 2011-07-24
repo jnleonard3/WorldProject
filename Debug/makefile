@@ -43,7 +43,7 @@ all: WorldProject
 WorldProject: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/Jon/Downloads/OpenSceneGraph-3.0.0/lib" -o"WorldProject" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/Jon/Downloads/OpenSceneGraph-3.0.0/lib" -o "WorldProject" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

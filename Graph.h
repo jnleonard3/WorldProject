@@ -9,6 +9,7 @@
 #define GRAPH_H_
 
 #include "CommonGeometry.h"
+#include "TriangleTerrainSkin.h"
 
 class VertexNode {
 public:
@@ -29,10 +30,12 @@ private:
 };
 
 struct TriangleElement {
-	TriangleElement(){};
-	TriangleElement(VertexNode* first, VertexNode* second, VertexNode* third);
+	TriangleElement():skin(Point(0,0,0),Point(0,0,0),Point(0,0,0)){};
+	TriangleElement(unsigned int levelOfDetail, VertexNode* first, VertexNode* second, VertexNode* third);
+
 	VertexNode* relatedNodes[3];
 	Triangle triangle;
+	TriangleTerrainSkin skin;
 };
 
 class FaceNode {
@@ -43,7 +46,7 @@ public:
 	void setConnected(FaceNode* node);
 	FaceNode* getConnected(int index);
 
-	TriangleElement getTriangle() const { return element; };
+	TriangleElement& getTriangle() { return element; };
 
 	const unsigned int getNumberConnected() const { return numberConnected; };
 

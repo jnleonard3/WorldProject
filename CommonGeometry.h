@@ -8,6 +8,8 @@
 #ifndef COMMONGEOMETRY_H_
 #define COMMONGEOMETRY_H_
 
+#include "MessageLogger.h"
+
 class Point {
 public:
 	Point();
@@ -21,6 +23,15 @@ public:
 
 	double z() const { return zVal; };
 	void z(double z){ zVal = z; };
+
+	Point add(const Point& rhs) const;
+
+	double distance(const Point& rhs) const;
+
+	friend MessageLogger& operator<<(MessageLogger &stream, const Point pt){
+		stream << "(" << pt.x() << "," << pt.y() << "," << pt.z() << ")";
+		return stream;
+	};
 
 private:
 	double xVal, yVal, zVal;
@@ -41,6 +52,27 @@ public:
 	double k() const { return kVal; };
 	void k(double k){ kVal = k; };
 
+	double dotProduct(const Vector& rhs) const;
+	
+	Vector scale(double val) const;
+	
+	Point translate(const Point& pt) const;
+
+	double magnitude() const;
+
+	Vector normalize() const;
+
+	Vector crossProduct(const Vector& rhs) const;
+
+	double angleBetween(const Vector &rhs) const;
+
+	bool equals(const Vector &rhs, double precision) const;
+
+	friend MessageLogger& operator<<(MessageLogger &stream, const Vector vec){
+		stream << "[" << vec.i() << "," << vec.j() << "," << vec.k() << "]";
+		return stream;
+	};
+
 private:
 	double iVal, jVal, kVal;
 };
@@ -58,14 +90,22 @@ class Triangle {
 public:
 	Triangle(){};
 	Triangle(Point one, Point two, Point three);
+	Triangle(double sideLength);
 
 	Point firstPoint() const { return first; };
+	void firstPoint(Point pt) { first = pt; };
 
 	Point secondPoint() const { return second; };
+	void secondPoint(Point pt) { second = pt; };
 
 	Point thirdPoint() const { return third; };
+	void thirdPoint(Point pt) { third = pt; };
+
+	Point center() const;
 
 	Plane toPlane() const;
+
+	Vector normal() const;
 
 private:
 	Point first, second, third;
