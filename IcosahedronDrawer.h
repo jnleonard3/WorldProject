@@ -14,11 +14,19 @@
 
 class IcosahedronDrawer {
 public:
-	static osg::Group* drawIcosahedron(IcosahedronGraph &shape);
-
+	IcosahedronDrawer(IcosahedronGraph &shape);
 	virtual ~IcosahedronDrawer();
+
+	osg::Group& getGroup() { return *group; };
+
+	static osg::Group* drawIcosahedron(IcosahedronGraph &shape);
 private:
-	IcosahedronDrawer();
+	IcosahedronGraph &icosahedron;
+	osg::Group *group;
+	osg::Vec3Array **vertices;
+
+	class TriangleSkinPrimitiveNode;
+	TriangleSkinPrimitiveNode **primitiveNode;
 };
 
 #endif /* ICOSAHEDRONDRAWER_H_ */

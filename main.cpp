@@ -35,7 +35,7 @@ int main() {
 	camera->getOrCreateStateSet()->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
 	root->addChild(camera);
 
-	IcosahedronGraph ico(5, 100.0);
+	IcosahedronGraph ico(5, 1700.0);
 	osg::Group* icosahedronRoot = IcosahedronDrawer::drawIcosahedron(ico);
 	root->addChild(icosahedronRoot);
 

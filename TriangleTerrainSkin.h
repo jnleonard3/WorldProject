@@ -12,23 +12,19 @@
 
 #include "PyramidCoordinateSpace.h"
 #include "CoordinatePoint.h"
-
-#include <vector>
+#include "PointIndex.h"
+#include "BlockArray.h"
 
 class TriangleTerrainSkin {
 public:
-	TriangleTerrainSkin(Point top, Point left, Point right);
-	TriangleTerrainSkin(unsigned int lod, Point top, Point left, Point right);
 	TriangleTerrainSkin(unsigned int lod, Triangle tri);
 	virtual ~TriangleTerrainSkin();
 
-	unsigned int getYOffsetCount();
-	unsigned int getXOffsetCount(unsigned int yIndex);
-	Point getVertex(unsigned int x, unsigned int y);
-	CoordinatePoint getCoordinatePoint(unsigned x, unsigned y);
-
 	PyramidCoordinateSpace& getCoordinateSpace() { return coordSystem; };
 
+	struct IndexTriangle {
+		unsigned int first, second, third;
+	};
 
 private:
 	Point topPoint, leftPoint, rightPoint;
@@ -38,20 +34,23 @@ private:
 
 	PyramidCoordinateSpace coordSystem;
 
-	struct TerrainVertex {
-		TerrainVertex(double x, double ht)
-		:xOffset(x),height(ht) {
+	struct IndexedPoint {
+		IndexedPoint():available(true){}
+		IndexedPoint(Point& pt):available(false),point(pt){}
 
-		}
-		double xOffset, height;
+		bool available;
+		Point point;
 	};
 
-	unsigned int addYOffset(double val);
-	void addHeightEntry(unsigned int index, double xOffset, double height);
-	void addPointToHeightMap(Point pt);
+	struct FreeSpaceNode;
+	FreeSpaceNode *freeSpaceRoot;
 
-	std::vector<double> heightOffsets;
-	std::vector<std::vector<TerrainVertex> > heightMap;
+	PointIndex addPointElement(Point pt);
+	void freePointElement(unsigned int index);
+
+	BlockArray<IndexedPoint> pointArray;
+
+	friend class IcosahedronDrawer;
 };
 
 #endif /* TRIANGLETERRAINSKIN_H_ */

@@ -8,12 +8,10 @@
 #include "TriangleTerrainSkin.h"
 #include "MessageLogger.h"
 
-#include <iostream>
-
 struct TriangleTerrainSkin::TriangleTerrainSkinNode {
 	
-	TriangleTerrainSkinNode(TriangleTerrainSkin& skin, Point& topPt, Point& leftPt, Point& rightPt):
-		terrainSkin(skin),
+	TriangleTerrainSkinNode(unsigned int height, Point& topPt, Point& leftPt, Point& rightPt):
+		nodeHeight(height),
 		top(topPt),left(leftPt),right(rightPt),
 		topNode(0),leftNode(0),middleNode(0),rightNode(0)
 	{
@@ -24,75 +22,45 @@ struct TriangleTerrainSkin::TriangleTerrainSkinNode {
 		leftMid = v1.translate(top);
 		rightMid = v2.translate(top);
 		bottom = v3.translate(left);
-		skin.addPointToHeightMap(leftMid);
-		skin.addPointToHeightMap(rightMid);
-		skin.addPointToHeightMap(bottom);
 	}
 
 	void generateNextLevel() {
 		if(topNode == 0) {
-			topNode = new TriangleTerrainSkinNode(terrainSkin,top,leftMid,rightMid);
+			topNode = new TriangleTerrainSkinNode(nodeHeight+1,top,leftMid,rightMid);
 		} else {
 			topNode->generateNextLevel();
 		}
 
 		if(leftNode == 0) {
-			leftNode = new TriangleTerrainSkinNode(terrainSkin,leftMid,left,bottom);
+			leftNode = new TriangleTerrainSkinNode(nodeHeight+1,leftMid,left,bottom);
 		} else {
 			leftNode->generateNextLevel();
 		}
 
 		if(middleNode == 0) {
-			middleNode = new TriangleTerrainSkinNode(terrainSkin,bottom,rightMid,leftMid);
+			middleNode = new TriangleTerrainSkinNode(nodeHeight+1,bottom,rightMid,leftMid);
 		} else {
 			middleNode->generateNextLevel();
 		}
 
 		if(rightNode == 0) {
-			rightNode = new TriangleTerrainSkinNode(terrainSkin,rightMid,bottom,right);
+			rightNode = new TriangleTerrainSkinNode(nodeHeight+1,rightMid,bottom,right);
 		} else {
 			rightNode->generateNextLevel();
 		}
 	}
-
-	TriangleTerrainSkin& terrainSkin;
+	const unsigned int nodeHeight;
 	Point &top, &left, &right;
 	Point bottom, leftMid, rightMid;
 	TriangleTerrainSkinNode *topNode, *leftNode, *middleNode, *rightNode;
 };
 
-TriangleTerrainSkin::TriangleTerrainSkin(Point top, Point left, Point right):
-topPoint(top),leftPoint(left),rightPoint(right),rootNode(0),
-coordSystem(top,left,right){
-	addPointToHeightMap(topPoint);
-	addPointToHeightMap(leftPoint);
-	addPointToHeightMap(rightPoint);
-}
-
-TriangleTerrainSkin::TriangleTerrainSkin(unsigned int lod, Point top, Point left, Point right):
-topPoint(top),leftPoint(left),rightPoint(right),rootNode(0),
-coordSystem(top,left,right){
-	addPointToHeightMap(topPoint);
-	addPointToHeightMap(leftPoint);
-	addPointToHeightMap(rightPoint);
-	for(unsigned int i = 0; i < lod; ++i) {
-		if(rootNode == 0) {
-			rootNode = new TriangleTerrainSkinNode(*this,topPoint,leftPoint,rightPoint);
-		} else {
-			rootNode->generateNextLevel();
-		}
-	}
-}
-
 TriangleTerrainSkin::TriangleTerrainSkin(unsigned int lod, Triangle tri):
 topPoint(tri.firstPoint()),leftPoint(tri.secondPoint()),rightPoint(tri.thirdPoint()),rootNode(0),
 coordSystem(topPoint,leftPoint,rightPoint){
-	addPointToHeightMap(topPoint);
-	addPointToHeightMap(leftPoint);
-	addPointToHeightMap(rightPoint);
 	for(unsigned int i = 0; i < lod; ++i) {
 		if(rootNode == 0) {
-			rootNode = new TriangleTerrainSkinNode(*this,topPoint,leftPoint,rightPoint);
+			rootNode = new TriangleTerrainSkinNode(0,topPoint,leftPoint,rightPoint);
 		} else {
 			rootNode->generateNextLevel();
 		}
@@ -103,59 +71,55 @@ TriangleTerrainSkin::~TriangleTerrainSkin() {
 
 }
 
-unsigned int TriangleTerrainSkin::getYOffsetCount() {
-	return heightOffsets.size();
-}
+struct TriangleTerrainSkin::FreeSpaceNode {
 
-unsigned int TriangleTerrainSkin::getXOffsetCount(unsigned int yIndex) {
-	return heightMap.at(yIndex).size();
-}
+	FreeSpaceNode(unsigned int frm, unsigned int to, FreeSpaceNode* nxt)
+	:from(frm),toExclusive(to),next(nxt){};
+	unsigned int from, toExclusive;
+	FreeSpaceNode* next;
+};
 
-Point TriangleTerrainSkin::getVertex(unsigned int xIndex, unsigned int yIndex) {
-	double x = heightMap.at(yIndex).at(xIndex).xOffset;
-	double y = heightOffsets.at(yIndex);
-	double z = heightMap.at(yIndex).at(xIndex).height;
-	return Point(x,y,z);
-}
-
-CoordinatePoint TriangleTerrainSkin::getCoordinatePoint(unsigned x, unsigned y) {
-	Point pt = getVertex(x,y);
-	return CoordinatePoint(pt,coordSystem,coordSystem.isValid(pt));
-}
-
-unsigned int TriangleTerrainSkin::addYOffset(double val) {
-	std::vector<double>::iterator itr = heightOffsets.begin();
-	std::vector<std::vector<TerrainVertex> >::iterator itr2 = heightMap.begin();
-	unsigned int i = 0;
-	while(itr != heightOffsets.end()) {
-		if(fabs(*itr - val) < 0.01) {
-			return i;
-		} else if(*itr < val) {
-			break;
+PointIndex TriangleTerrainSkin::addPointElement(Point pt) {
+	if(freeSpaceRoot == 0) {
+		IndexedPoint &pt = pointArray.pushBack(IndexedPoint(pt));
+		return PointIndex(pointArray.getSize()-1, pt.point);
+	} else {
+		unsigned int index = freeSpaceRoot->from;
+		freeSpaceRoot->from++;
+		if(freeSpaceRoot->from == freeSpaceRoot->toExclusive) {
+			FreeSpaceNode *oldNode = freeSpaceRoot;
+			freeSpaceRoot = freeSpaceRoot->next;
+			delete oldNode;
 		}
-		itr++;
-		itr2++;
-		i++;
+
+		pointArray.at(index) = IndexedPoint(pt);
+		IndexedPoint &pt = pointArray.at(index);
+		return PointIndex(index, pt.point);
 	}
-	heightOffsets.insert(itr,val);
-	heightMap.insert(itr2,std::vector<TerrainVertex>());
-	return i;
 }
 
-void TriangleTerrainSkin::addHeightEntry(unsigned int index, double xOffset, double height) {
-	std::vector<TerrainVertex>::iterator itr = heightMap.at(index).begin();
-	while(itr != heightMap.at(index).end()) {
-		if(itr->xOffset == xOffset) {
-			return;
-		} else if(itr->xOffset < xOffset) {
-			break;
+void TriangleTerrainSkin::freePointElement(unsigned int index) {
+	pointArray.at(index).available = true;
+	if(freeSpaceRoot == 0) {
+		freeSpaceRoot = new FreeSpaceNode(index, index+1, 0);
+	} else if(freeSpaceRoot->from > index + 1) {
+		FreeSpaceNode *node = new FreeSpaceNode(index, index+1, freeSpaceRoot);
+		freeSpaceRoot = node;
+	} else {
+		FreeSpaceNode *node = freeSpaceRoot;
+		while(true) {
+			if(node->from == index + 1) {
+				node->from--;
+				return;
+			} else if(node->toExclusive == index) {
+				node->toExclusive++;
+				return;
+			} else if(node->next == 0 || node->next->from > index) {
+				node->next = new FreeSpaceNode(index, index+1, node->next);
+				return;
+			} else {
+				node = node->next;
+			}
 		}
-		itr++;
 	}
-	heightMap.at(index).insert(itr,TerrainVertex(xOffset,height));
-}
-
-void TriangleTerrainSkin::addPointToHeightMap(Point pt) {
-	unsigned int index = addYOffset(pt.y());
-	addHeightEntry(index,pt.x(),pt.z());
 }

@@ -30,7 +30,7 @@ private:
 };
 
 struct TriangleElement {
-	TriangleElement():skin(Point(0,0,0),Point(0,0,0),Point(0,0,0)){};
+	TriangleElement():skin(0,Triangle(Point(0,0,0),Point(0,0,0),Point(0,0,0))){};
 	TriangleElement(unsigned int levelOfDetail, VertexNode* first, VertexNode* second, VertexNode* third);
 
 	VertexNode* relatedNodes[3];

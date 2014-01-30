@@ -19,7 +19,14 @@
 #include "MessageLogger.h"
 #include <iostream>
 
-IcosahedronDrawer::IcosahedronDrawer() {
+IcosahedronDrawer::IcosahedronDrawer(IcosahedronGraph &shape)
+:icosahedron(shape) {
+	vertices = new osg::Vec3Array*[20];
+	primitiveNode = new TriangleSkinPrimitiveNode*[20];
+	for(unsigned int i = 0; i < 20; ++i) {
+		vertices[i] = new osg::Vec3Array;
+		primitiveNode[i] = 0;
+	}
 }
 
 IcosahedronDrawer::~IcosahedronDrawer() {
@@ -41,6 +48,7 @@ osg::Group* IcosahedronDrawer::drawIcosahedron(IcosahedronGraph &shape) {
 		colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f));
 		colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f));
+		colors->push_back(osg::Vec4(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 
 	unsigned int trianglesRendered = 0;
@@ -57,14 +65,11 @@ osg::Group* IcosahedronDrawer::drawIcosahedron(IcosahedronGraph &shape) {
 
 		std::vector<unsigned int> offsetCountSum;
 		for (unsigned int y = 0; y < skin.getYOffsetCount(); ++y) {
-			std::cout << skin.getCoordinatePoint(0, y).getPoint().y() << ": ";
 			for (unsigned int x = 0; x < skin.getXOffsetCount(y); ++x) {
 				CoordinatePoint pt = skin.getCoordinatePoint(x, y);
 				Point pt2 = shape.getCoordinateSystem().convertTo(shape.getCoordinateSystem(), pt).getPoint();
 				vertices->push_back(osg::Vec3(pt2.x(), pt2.y(), pt2.z()));
-				std::cout << pt2.x() << ", ";
 			}
-			std::cout << "\n";
 			if(offsetCountSum.size() == 0) {
 				offsetCountSum.push_back(0);
 			} else {
@@ -78,7 +83,7 @@ osg::Group* IcosahedronDrawer::drawIcosahedron(IcosahedronGraph &shape) {
 				Point pt = skin.getVertex(x,y);
 				bool triangleFound = false;
 				for(unsigned int v = y+1; v < skin.getYOffsetCount(); ++v) {
-					for(unsigned int u = 0; u < skin.getXOffsetCount(y)-1; ++u) {
+					for(unsigned int u = 0; u < skin.getXOffsetCount(v)-1; ++u) {
 						Point pt2 = skin.getVertex(u,v);
 						if(pt.x() < pt2.x()) {
 							Point pt3 = skin.getVertex(u+1,v);
@@ -95,10 +100,10 @@ osg::Group* IcosahedronDrawer::drawIcosahedron(IcosahedronGraph &shape) {
 						}
 					}
 					if(triangleFound) {
-						triangleFound = false;
 						break;
 					}
 				}
+				triangleFound = false;
 
 				if(x < (skin.getXOffsetCount(y)-1)) {
 					Point pt2 = skin.getVertex(x+1,y);
