@@ -10,7 +10,7 @@
 /**
  * \class NodeModificationVisitor
  */
-class NodeModificationVisitor : public NodeVisitor {
+class NodeModificationVisitor {
 public:
 	virtual ~NodeModificationVisitor(){};
 	virtual void visit(NodeVisitorModificationSession *session, ImmutableNode node) = 0;

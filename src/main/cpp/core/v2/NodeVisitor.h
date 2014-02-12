@@ -7,6 +7,8 @@
 #ifndef NODE_VISITOR_H_
 #define NODE_VISITOR_H_
 
+#include "ImmutableNode.h"
+
 /**
  * \class NodeVisitor
  */

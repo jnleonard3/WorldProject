@@ -7,17 +7,35 @@
 #ifndef NODE_VISITOR_SESSION_H_
 #define NODE_VISITOR_SESSION_H_
 
+#include "ImmutableNode.h"
+
+class Node;
+class NodeVisitor;
+
+/**
+ * \class AbstractVisitorSession
+ */
+class AbstractVisitorSession {
+public:
+	AbstractVisitorSession(Node *startNode):currentNode(startNode){};
+	virtual ~AbstractVisitorSession(){};
+	virtual void traverse();
+protected:
+	virtual void visitCurrentNode(ImmutableNode node) = 0;
+	Node *currentNode;
+	Node *nextNode;
+};
+
 /**
  * \class NodeVisitorSession
  */
-class NodeVisitorSession {
+class NodeVisitorSession : public AbstractVisitorSession {
 public:
-	NodeVisitorSession(NodeVisitor *visitor, Node *startNode):visitor(visitor),currentNode(startNode){};
-	void traverse(NodeVisitor *visitor);
+	NodeVisitorSession(Node *startNode, NodeVisitor *visitor):AbstractVisitorSession(startNode),visitor(visitor){};
+protected:
+	virtual void visitCurrentNode(ImmutableNode node);
 private:
 	NodeVisitor *visitor;
-	Node *currentNode;
-	Node *nextNode;
 };
 
 #endif

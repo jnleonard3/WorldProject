@@ -10,15 +10,15 @@
 /**
  * \class NodeVisitorModificationSession
  */
-class NodeVisitorModificationSession {
+class NodeVisitorModificationSession : public AbstractVisitorSession {
 public:
-	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor):NodeVisitorSession(startNode, visitor){};
+	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor):AbstractVisitorSession(startNode),visitor(visitor){};
+	virtual void visitCurrentNode(ImmutableNode node);
 	void addChildNode(int index);
 	void removeChildNode(int index);	
 private:
 	boost::ptr_list<ModificationVisitorAction> actions;
-	Node *currentNode;
-	Node *nextNode;
+	NodeModificationVisitor *visitor;
 };
 
 #endif

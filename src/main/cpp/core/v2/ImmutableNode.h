@@ -12,8 +12,32 @@
  */
 class ImmutableNode {
 public:
-	ImmutableNode(){};
+	ImmutableNode(unsigned long id):id(id){};
 private:
+	unsigned long id;
+};
+
+/**
+ * \class ImmutableChildNode
+ */
+class ImmutableChildNode : public ImmutableNode {
+public:
+	ImmutableChildNode(unsigned long id):ImmutableNode(id){};
+private:
+	unsigned long parentNodes[2];
+	unsigned long siblingNodes[4];
+	unsigned long childNodes[6];
+};
+
+/**
+ * \class ImmutableRootNode
+ */
+class ImmutableRootNode : public ImmutableNode {
+public:
+	ImmutableRootNode(unsigned long id):ImmutableNode(id){};
+private:
+	unsigned long siblingNodes[5];
+	unsigned long childNodes[5];
 };
 
 #endif

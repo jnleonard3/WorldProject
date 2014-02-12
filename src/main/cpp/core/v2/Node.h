@@ -8,6 +8,7 @@
 #define NODE_H_
 
 #include <boost/ptr_container/ptr_list.hpp>
+#include "NodeConnectivityData.h"
 
 /**
  * \class Node
