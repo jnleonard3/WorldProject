@@ -1,19 +1,18 @@
-#include "core/v2/NodeVisitorSession.h"
+#include "core/v2/ImmutableNode.h"
 #include "core/v2/Node.h"
-#include "core/v2/NodeVisitor.h"
 
 #include "gtest/gtest.h"
 #include <iostream>
 
-class NodeVisitorSessionTest : public ::testing::Test {
+class ImmutableNodeFactoryTest : public ::testing::Test {
 public:
 	Node *one;
 	Node *two;
 protected:
-	NodeVisitorSessionTest() {
+	ImmutableNodeFactoryTest() {
 	}
 
-	virtual ~NodeVisitorSessionTest() {
+	virtual ~ImmutableNodeFactoryTest() {
 	}
 
 	virtual void SetUp() {
@@ -33,14 +32,6 @@ protected:
 	}
 };
 
-class TestVisitor : public NodeVisitor {
-	virtual void visit(NodeVisitorSession *session, ImmutableNode* node) {
-		std::cout << node->getId() << std::endl;
-	}
-};
-
-TEST_F(NodeVisitorSessionTest, TestVisiting) {
-	TestVisitor *testVisitor = new TestVisitor();
-	NodeVisitorSession session(one, testVisitor);
-	//session.traverse(1);
+TEST_F(ImmutableNodeFactoryTest, TestFactory) {
+	ImmutableNode* immutable = ImmutableNodeFactory::createImmutableNode(1, one);
 }

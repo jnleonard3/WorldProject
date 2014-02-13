@@ -15,7 +15,7 @@
 class NodeVisitor {
 public:
 	virtual ~NodeVisitor(){};
-	virtual void visit(NodeVisitorSession *session, ImmutableNode node) = 0;
+	virtual void visit(NodeVisitorSession *session, ImmutableNode* node) = 0;
 };
 
 #endif

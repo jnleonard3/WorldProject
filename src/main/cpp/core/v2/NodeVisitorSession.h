@@ -19,9 +19,9 @@ class AbstractVisitorSession {
 public:
 	AbstractVisitorSession(Node *startNode):currentNode(startNode){};
 	virtual ~AbstractVisitorSession(){};
-	virtual void traverse();
+	virtual void traverse(unsigned long maxRevision);
 protected:
-	virtual void visitCurrentNode(ImmutableNode node) = 0;
+	virtual void visitNode(ImmutableNode* node) = 0;
 	Node *currentNode;
 	Node *nextNode;
 };
@@ -33,7 +33,7 @@ class NodeVisitorSession : public AbstractVisitorSession {
 public:
 	NodeVisitorSession(Node *startNode, NodeVisitor *visitor):AbstractVisitorSession(startNode),visitor(visitor){};
 protected:
-	virtual void visitCurrentNode(ImmutableNode node);
+	virtual void visitNode(ImmutableNode* node);
 private:
 	NodeVisitor *visitor;
 };

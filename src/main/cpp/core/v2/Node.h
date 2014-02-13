@@ -16,6 +16,9 @@
 class Node {
 public:
 	Node(unsigned long id):id(id){};
+	unsigned long getId() {return id;}
+	void addConnectivity(NodeConnectivityData *connectivity);
+	NodeConnectivityData* getConnectivity(unsigned long revision);
 private:
 	const unsigned long id;
 	boost::ptr_list<NodeConnectivityData> connectivityData;

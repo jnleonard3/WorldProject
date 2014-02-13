@@ -3,17 +3,15 @@
 #include "Node.h"
 #include "NodeVisitor.h"
 
-ImmutableNode immuteNode(Node *node) {
-	
-}
-
-void AbstractVisitorSession::traverse() {
+void AbstractVisitorSession::traverse(unsigned long maxRevision) {
 	while(currentNode != NULL) {
-		visitCurrentNode(immuteNode(currentNode));
+		ImmutableNode *node = ImmutableNodeFactory::createImmutableNode(maxRevision, currentNode);
+		visitNode(node);
+		delete node;
 		currentNode = nextNode;
 	}
 }
 
-void NodeVisitorSession::visitCurrentNode(ImmutableNode node) {
-	visitor->visit(this,node);
+void NodeVisitorSession::visitNode(ImmutableNode* node) {
+	visitor->visit(this, node);
 }

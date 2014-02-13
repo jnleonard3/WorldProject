@@ -12,10 +12,10 @@
  */
 class NodeData {
 public:
-	NodeData(unsigned long revisionId):revisionId(revisionId){}
-	unsigned long getRevisionId();
+	NodeData(unsigned long revision):revision(revision){}
+	unsigned long getRevision() {return revision;}
 private:
-	const unsigned long revisionId;
+	const unsigned long revision;
 };
 
 #endif

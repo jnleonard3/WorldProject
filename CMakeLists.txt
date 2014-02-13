@@ -6,6 +6,8 @@ set(TEST_PREFIX src/test/cpp)
 
 set(SOURCE_FILES
 	${SRC_PREFIX}/core/v2/NodeVisitorSession.cpp
+	${SRC_PREFIX}/core/v2/ImmutableNode.cpp
+	${SRC_PREFIX}/core/v2/Node.cpp
 )
 
 set(HEADER_FILES
@@ -21,6 +23,7 @@ set(HEADER_FILES
 )
 
 set(UNIT_TEST_FILES
+	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
 	${TEST_PREFIX}/core/v2/TestNodeVisitorSession.cpp
 )
 
