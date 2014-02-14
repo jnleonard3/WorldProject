@@ -17,13 +17,15 @@ class NodeVisitor;
  */
 class AbstractVisitorSession {
 public:
-	AbstractVisitorSession(Node *startNode):currentNode(startNode){};
+	AbstractVisitorSession(Node *startNode, unsigned long maxRevision):currentNode(startNode),nextNode(0),maxRevision(maxRevision){};
 	virtual ~AbstractVisitorSession(){};
-	virtual void traverse(unsigned long maxRevision);
+	virtual void traverse();
+	void setNextNode(unsigned long nextNodeId);
 protected:
 	virtual void visitNode(ImmutableNode* node) = 0;
 	Node *currentNode;
 	Node *nextNode;
+	unsigned long maxRevision;
 };
 
 /**
@@ -31,7 +33,7 @@ protected:
  */
 class NodeVisitorSession : public AbstractVisitorSession {
 public:
-	NodeVisitorSession(Node *startNode, NodeVisitor *visitor):AbstractVisitorSession(startNode),visitor(visitor){};
+	NodeVisitorSession(Node *startNode, NodeVisitor *visitor, unsigned long maxRevision):AbstractVisitorSession(startNode,maxRevision),visitor(visitor){};
 protected:
 	virtual void visitNode(ImmutableNode* node);
 private:

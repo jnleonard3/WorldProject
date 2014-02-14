@@ -12,7 +12,7 @@
  */
 class NodeVisitorModificationSession : public AbstractVisitorSession {
 public:
-	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor):AbstractVisitorSession(startNode),visitor(visitor){};
+	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor, unsigned long maxRevision):AbstractVisitorSession(startNode, maxRevision),visitor(visitor){};
 	virtual void visitCurrentNode(ImmutableNode node);
 	void addChildNode(int index);
 	void removeChildNode(int index);	

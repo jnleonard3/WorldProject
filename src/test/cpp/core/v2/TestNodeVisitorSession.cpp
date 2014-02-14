@@ -34,13 +34,20 @@ protected:
 };
 
 class TestVisitor : public NodeVisitor {
+public:
+	int nodesVisited;
+	TestVisitor():nodesVisited(0){}
 	virtual void visit(NodeVisitorSession *session, ImmutableNode* node) {
-		std::cout << node->getId() << std::endl;
+		nodesVisited += 1;
+		if(nodesVisited == 1) {
+			session->setNextNode(node->getSiblingNodes()[0]);
+		}
 	}
 };
 
 TEST_F(NodeVisitorSessionTest, TestVisiting) {
 	TestVisitor *testVisitor = new TestVisitor();
-	NodeVisitorSession session(one, testVisitor);
-	//session.traverse(1);
+	NodeVisitorSession session(one, testVisitor, 1);
+	session.traverse();
+	ASSERT_EQ(2, testVisitor->nodesVisited);
 }

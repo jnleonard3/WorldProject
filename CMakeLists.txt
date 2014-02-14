@@ -9,6 +9,7 @@ set(SOURCE_FILES
 	${SRC_PREFIX}/core/v2/NodeConnectivityData.cpp
 	${SRC_PREFIX}/core/v2/ImmutableNode.cpp
 	${SRC_PREFIX}/core/v2/Node.cpp
+	${SRC_PREFIX}/core/v2/GraphManager.cpp
 )
 
 set(HEADER_FILES

@@ -6,7 +6,7 @@ void Node::addConnectivity(NodeConnectivityData *connectivity) {
 
 NodeConnectivityData* Node::getConnectivity(unsigned long revision) {
 	for (boost::ptr_list<NodeConnectivityData>::iterator iter = connectivityData.begin(); iter != connectivityData.end(); iter++) {
-		if(iter->getRevision() <= revision) {
+		if(!is_null(iter) && iter->getRevision() <= revision) {
 			return &(*iter);
 		}
 	}
