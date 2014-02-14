@@ -33,12 +33,12 @@ private:
  */
 class ImmutableChildNode : public ImmutableNode {
 public:
-	ImmutableChildNode(unsigned long id):ImmutableNode(id){}
+	ImmutableChildNode(unsigned long id);
 	virtual bool isChild() {return true;}
 	virtual unsigned long* getParentNodes() {return parentNodes;}
 	virtual int getParentNodeCount() {return 2;}
 	virtual unsigned long* getSiblingNodes() {return siblingNodes;}
-	virtual int getSiblingNodeCount() {return 4;};
+	virtual int getSiblingNodeCount() {return 4;}
 	virtual unsigned long* getChildNodes() {return childNodes;}
 	virtual int getChildNodeCount() {return 6;}
 private:
@@ -52,7 +52,7 @@ private:
  */
 class ImmutableRootNode : public ImmutableNode {
 public:
-	ImmutableRootNode(unsigned long id):ImmutableNode(id){}
+	ImmutableRootNode(unsigned long id);
 	virtual bool isChild() {return false;}
 	virtual unsigned long* getParentNodes() {return 0;}
 	virtual int getParentNodeCount() {return 0;}

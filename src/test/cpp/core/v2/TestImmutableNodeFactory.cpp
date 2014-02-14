@@ -34,4 +34,7 @@ protected:
 
 TEST_F(ImmutableNodeFactoryTest, TestFactory) {
 	ImmutableNode* immutable = ImmutableNodeFactory::createImmutableNode(1, one);
+	ASSERT_EQ(5, immutable->getSiblingNodeCount());
+	ASSERT_EQ(2, immutable->getSiblingNodes()[0]);
+	ASSERT_EQ(0, immutable->getSiblingNodes()[1]);
 }

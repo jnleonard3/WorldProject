@@ -33,12 +33,12 @@ private:
  */
 class NodeConnectivityChildData : public NodeConnectivityData {
 public:
-	NodeConnectivityChildData(unsigned long revisionId):NodeConnectivityData(revisionId){}
+	NodeConnectivityChildData(unsigned long revisionId);
 	virtual bool isChild() {return true;}
 	virtual Node** getParentNodes() {return parentNodes;}
 	virtual int getParentNodeCount() {return 2;}
 	virtual Node** getSiblingNodes() {return siblingNodes;}
-	virtual int getSiblingNodeCount() {return 4;};
+	virtual int getSiblingNodeCount() {return 4;}
 	virtual Node** getChildNodes() {return childNodes;}
 	virtual int getChildNodeCount() {return 6;}
 private:
@@ -52,9 +52,9 @@ private:
  */
 class NodeConnectivityRootData : public NodeConnectivityData {
 public:
-	NodeConnectivityRootData(unsigned long revisionId):NodeConnectivityData(revisionId){}
+	NodeConnectivityRootData(unsigned long revisionId);
 	virtual bool isChild() {return false;}
-	virtual Node** getParentNodes() {return NULL;}
+	virtual Node** getParentNodes() {return 0;}
 	virtual int getParentNodeCount() {return 0;}
 	virtual Node** getSiblingNodes() {return siblingNodes;}
 	virtual int getSiblingNodeCount() {return 5;}
