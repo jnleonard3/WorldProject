@@ -37,7 +37,7 @@ class TestVisitor : public NodeVisitor {
 public:
 	int nodesVisited;
 	TestVisitor():nodesVisited(0){}
-	virtual void visit(NodeVisitorSession *session, ImmutableNode* node) {
+	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
 		if(nodesVisited == 1) {
 			session->setNextNode(node->getSiblingNodes()[0]);

@@ -8,6 +8,7 @@
 #define NODE_VISITOR_H_
 
 #include "ImmutableNode.h"
+#include "NodeVisitorSession.h"
 
 /**
  * \class NodeVisitor
@@ -15,7 +16,10 @@
 class NodeVisitor {
 public:
 	virtual ~NodeVisitor(){};
-	virtual void visit(NodeVisitorSession *session, ImmutableNode* node) = 0;
+	virtual void visit(NodeVisitorSession *session, ImmutableNode* node){this->session = session;visit(node);};
+	virtual void visit(ImmutableNode *node) = 0;
+protected:
+	NodeVisitorSession *session;
 };
 
 #endif

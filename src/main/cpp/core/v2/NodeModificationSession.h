@@ -10,9 +10,9 @@
 /**
  * \class NodeVisitorModificationSession
  */
-class NodeVisitorModificationSession : public AbstractVisitorSession {
+class NodeVisitorModificationSession : public AbstractSimpleVisitorSession {
 public:
-	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor, unsigned long maxRevision):AbstractVisitorSession(startNode, maxRevision),visitor(visitor){};
+	NodeVisitorModificationSession(Node *startNode, NodeModificationVisitor *visitor, unsigned long maxRevision):AbstractSimpleVisitorSession(startNode, maxRevision),visitor(visitor){};
 	virtual void visitCurrentNode(ImmutableNode node);
 	void addChildNode(int index);
 	void removeChildNode(int index);	

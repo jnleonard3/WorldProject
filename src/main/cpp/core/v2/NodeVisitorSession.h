@@ -17,23 +17,39 @@ class NodeVisitor;
  */
 class AbstractVisitorSession {
 public:
-	AbstractVisitorSession(Node *startNode, unsigned long maxRevision):currentNode(startNode),nextNode(0),maxRevision(maxRevision){};
+	AbstractVisitorSession(Node *startNode, unsigned long maxRevision):currentNode(startNode),maxRevision(maxRevision){};
 	virtual ~AbstractVisitorSession(){};
+	virtual void traverse() = 0;
+	unsigned long getMaxRevision(){return maxRevision;}
+protected:
+	virtual void visitNode(ImmutableNode* node) = 0;
+	Node *currentNode;
+private:
+	const unsigned long maxRevision;
+};
+
+/**
+ * \class AbstractVisitorSession
+ */
+class AbstractSimpleVisitorSession : public AbstractVisitorSession {
+public:
+	AbstractSimpleVisitorSession(Node *startNode, unsigned long maxRevision):AbstractVisitorSession(startNode,maxRevision),nextNode(0){};
+	virtual ~AbstractSimpleVisitorSession(){};
 	virtual void traverse();
 	void setNextNode(unsigned long nextNodeId);
 protected:
 	virtual void visitNode(ImmutableNode* node) = 0;
-	Node *currentNode;
+	Node* getNextNode(){return nextNode;}
+private:
 	Node *nextNode;
-	unsigned long maxRevision;
 };
 
 /**
  * \class NodeVisitorSession
  */
-class NodeVisitorSession : public AbstractVisitorSession {
+class NodeVisitorSession : public AbstractSimpleVisitorSession {
 public:
-	NodeVisitorSession(Node *startNode, NodeVisitor *visitor, unsigned long maxRevision):AbstractVisitorSession(startNode,maxRevision),visitor(visitor){};
+	NodeVisitorSession(Node *startNode, NodeVisitor *visitor, unsigned long maxRevision):AbstractSimpleVisitorSession(startNode,maxRevision),visitor(visitor){};
 protected:
 	virtual void visitNode(ImmutableNode* node);
 private:

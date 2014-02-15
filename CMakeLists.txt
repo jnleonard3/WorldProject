@@ -25,6 +25,7 @@ set(HEADER_FILES
 )
 
 set(UNIT_TEST_FILES
+	${TEST_PREFIX}/core/v2/TestGraphManager.cpp
 	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
 	${TEST_PREFIX}/core/v2/TestNodeVisitorSession.cpp
 )

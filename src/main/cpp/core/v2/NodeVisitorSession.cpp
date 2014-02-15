@@ -3,18 +3,18 @@
 #include "Node.h"
 #include "NodeVisitor.h"
 
-void AbstractVisitorSession::traverse() {
+void AbstractSimpleVisitorSession::traverse() {
 	while(currentNode != NULL) {
-		ImmutableNode *node = ImmutableNodeFactory::createImmutableNode(maxRevision, currentNode);
+		ImmutableNode *node = ImmutableNodeFactory::createImmutableNode(getMaxRevision(), currentNode);
 		visitNode(node);
 		delete node;
-		currentNode = nextNode;
+		currentNode = getNextNode();
 		nextNode = 0;
 	}
 }
 
-void AbstractVisitorSession::setNextNode(unsigned long nextNodeId) {
-	NodeConnectivityData *connectivity = currentNode->getConnectivity(maxRevision);
+void AbstractSimpleVisitorSession::setNextNode(unsigned long nextNodeId) {
+	NodeConnectivityData *connectivity = currentNode->getConnectivity(getMaxRevision());
 	for(int i = 0; i < connectivity->getParentNodeCount(); i += 1) {
 		if(connectivity->getParentNodes()[i] != 0 && connectivity->getParentNodes()[i]->getId() == nextNodeId) {
 			nextNode = connectivity->getParentNodes()[i];
