@@ -5,29 +5,32 @@ set(SRC_PREFIX src/main/cpp)
 set(TEST_PREFIX src/test/cpp)
 
 set(SOURCE_FILES
-	${SRC_PREFIX}/core/v2/NodeVisitorSession.cpp
-	${SRC_PREFIX}/core/v2/NodeConnectivityData.cpp
+	${SRC_PREFIX}/core/v2/GraphManager.cpp
 	${SRC_PREFIX}/core/v2/ImmutableNode.cpp
 	${SRC_PREFIX}/core/v2/Node.cpp
-	${SRC_PREFIX}/core/v2/GraphManager.cpp
+	${SRC_PREFIX}/core/v2/NodeConnectivityData.cpp
+	${SRC_PREFIX}/core/v2/NodeVisitorSession.cpp
+	${SRC_PREFIX}/core/v2/SimpleNodeVisitor.cpp
 )
 
 set(HEADER_FILES
+	${SRC_PREFIX}/core/v2/AbstractNodeVisitor.h
+	${SRC_PREFIX}/core/v2/AbstractNodeVisitorController.h
+	${SRC_PREFIX}/core/v2/GraphManager.h
 	${SRC_PREFIX}/core/v2/ImmutableNode.h
 	${SRC_PREFIX}/core/v2/ModificationVisitorAction.h
 	${SRC_PREFIX}/core/v2/Node.h
 	${SRC_PREFIX}/core/v2/NodeConnectivityData.h
 	${SRC_PREFIX}/core/v2/NodeData.h
-	${SRC_PREFIX}/core/v2/NodeModificationSession.h
 	${SRC_PREFIX}/core/v2/NodeModificationVisitor.h
-	${SRC_PREFIX}/core/v2/NodeVisitor.h
 	${SRC_PREFIX}/core/v2/NodeVisitorSession.h
+	${SRC_PREFIX}/core/v2/SimpleNodeVisitor.h
 )
 
 set(UNIT_TEST_FILES
 	${TEST_PREFIX}/core/v2/TestGraphManager.cpp
 	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
-	${TEST_PREFIX}/core/v2/TestNodeVisitorSession.cpp
+	${TEST_PREFIX}/core/v2/TestSimpleNodeVisitorSession.cpp
 )
 
 set(CORE_DEP_LIBS
