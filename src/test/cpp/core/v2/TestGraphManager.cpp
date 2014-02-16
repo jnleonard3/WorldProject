@@ -2,7 +2,6 @@
 #include "core/v2/Node.h"
 
 #include "gtest/gtest.h"
-#include <iostream>
 
 class GraphManagerTest : public ::testing::Test {
 public:

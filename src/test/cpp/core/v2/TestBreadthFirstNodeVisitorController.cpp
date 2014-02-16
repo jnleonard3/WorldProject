@@ -1,20 +1,21 @@
-#include "core/v2/SimpleNodeVisitor.h"
+#include "core/v2/BreadthFirstNodeVisitorController.h"
 
 #include "core/v2/Node.h"
-#include "core/v2/ImmutableNode.h"
+#include "core/v2/AbstractNodeVisitor.h"
+#include "core/v2/BreadthFirstNodeVisitorController.h"
 #include "core/v2/NodeVisitorSession.h"
 
 #include "gtest/gtest.h"
 
-class SimpleNodeVisitorSessionTest : public ::testing::Test {
+class BreadthFirstNodeVisitorControllerTest : public ::testing::Test {
 public:
 	Node *one;
 	Node *two;
 protected:
-	SimpleNodeVisitorSessionTest() {
+	BreadthFirstNodeVisitorControllerTest() {
 	}
 
-	virtual ~SimpleNodeVisitorSessionTest() {
+	virtual ~BreadthFirstNodeVisitorControllerTest() {
 	}
 
 	virtual void SetUp() {
@@ -34,21 +35,18 @@ protected:
 	}
 };
 
-class TestVisitor : public SimpleNodeVisitor {
+class TestBreadthVisitor : public AbstractNodeVisitor {
 public:
 	int nodesVisited;
-	TestVisitor():nodesVisited(0){}
+	TestBreadthVisitor():nodesVisited(0){}
 	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
-		if(nodesVisited == 1) {
-			setNextNode(node->getSiblingNodes()[0]);
-		}
 	}
 };
 
-TEST_F(SimpleNodeVisitorSessionTest, TestVisiting) {
-	TestVisitor *testVisitor = new TestVisitor();
+TEST_F(BreadthFirstNodeVisitorControllerTest, TestBreadthFirstNodeVisitorController) {
+	TestBreadthVisitor *testVisitor = new TestBreadthVisitor();
 	NodeVisitorSession session(1);
-	session.traverse(one, testVisitor, testVisitor);
+	session.traverse(one, new BreadthFirstNodeVisitorController(), testVisitor);
 	ASSERT_EQ(2, testVisitor->nodesVisited);
 }

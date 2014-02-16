@@ -5,6 +5,7 @@ set(SRC_PREFIX src/main/cpp)
 set(TEST_PREFIX src/test/cpp)
 
 set(SOURCE_FILES
+	${SRC_PREFIX}/core/v2/BreadthFirstNodeVisitorController.cpp
 	${SRC_PREFIX}/core/v2/GraphManager.cpp
 	${SRC_PREFIX}/core/v2/ImmutableNode.cpp
 	${SRC_PREFIX}/core/v2/Node.cpp
@@ -16,6 +17,7 @@ set(SOURCE_FILES
 set(HEADER_FILES
 	${SRC_PREFIX}/core/v2/AbstractNodeVisitor.h
 	${SRC_PREFIX}/core/v2/AbstractNodeVisitorController.h
+	${SRC_PREFIX}/core/v2/BreadthFirstNodeVisitorController.h
 	${SRC_PREFIX}/core/v2/GraphManager.h
 	${SRC_PREFIX}/core/v2/ImmutableNode.h
 	${SRC_PREFIX}/core/v2/ModificationVisitorAction.h
@@ -28,6 +30,7 @@ set(HEADER_FILES
 )
 
 set(UNIT_TEST_FILES
+	${TEST_PREFIX}/core/v2/TestBreadthFirstNodeVisitorController.cpp
 	${TEST_PREFIX}/core/v2/TestGraphManager.cpp
 	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
 	${TEST_PREFIX}/core/v2/TestSimpleNodeVisitorSession.cpp

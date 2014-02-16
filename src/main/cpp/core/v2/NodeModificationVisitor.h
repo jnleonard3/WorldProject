@@ -16,7 +16,7 @@ class NodeModificationVisitor : public SimpleNodeVisitor {
 public:
 	virtual ~NodeModificationVisitor(){};
 	virtual void visit(ImmutableNode *node) = 0;
-	virtual Node* getNextNode(NodeConnectivityData *connectivity);
+	virtual Node* getNextNode(unsigned long id, NodeConnectivityData *connectivity);
 protected:
 	void addChildNode(int index);
 	void removeChildNode(int index);

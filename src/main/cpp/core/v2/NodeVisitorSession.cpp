@@ -12,6 +12,6 @@ void NodeVisitorSession::traverse(Node *startNode, AbstractNodeVisitorController
 		visitor->visit(immutableNode);
 		delete immutableNode;
 		NodeConnectivityData *connectivity = currentNode->getConnectivity(getMaxRevision());
-		currentNode = controller->getNextNode(connectivity);
+		currentNode = controller->getNextNode(currentNode->getId(), connectivity);
 	}
 }

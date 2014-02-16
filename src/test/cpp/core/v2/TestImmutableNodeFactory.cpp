@@ -2,7 +2,6 @@
 #include "core/v2/Node.h"
 
 #include "gtest/gtest.h"
-#include <iostream>
 
 class ImmutableNodeFactoryTest : public ::testing::Test {
 public:
