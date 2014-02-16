@@ -9,6 +9,8 @@
 
 #include "SimpleNodeVisitor.h"
 
+#include <map>
+
 /**
  * \class NodeModificationVisitor
  */
@@ -21,7 +23,8 @@ protected:
 	void addChildNode(int index);
 	void removeChildNode(int index);
 private:
-	boost::ptr_list<ModificationVisitorAction> actions;
+	Node* currentNode;
+	std::map<unsigned long, Node*> modifiedNodes;
 };
 
 #endif

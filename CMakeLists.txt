@@ -10,6 +10,7 @@ set(SOURCE_FILES
 	${SRC_PREFIX}/core/v2/ImmutableNode.cpp
 	${SRC_PREFIX}/core/v2/Node.cpp
 	${SRC_PREFIX}/core/v2/NodeConnectivityData.cpp
+	${SRC_PREFIX}/core/v2/NodeModificationVisitor.cpp
 	${SRC_PREFIX}/core/v2/NodeVisitorSession.cpp
 	${SRC_PREFIX}/core/v2/SimpleNodeVisitor.cpp
 )
@@ -33,6 +34,7 @@ set(UNIT_TEST_FILES
 	${TEST_PREFIX}/core/v2/TestBreadthFirstNodeVisitorController.cpp
 	${TEST_PREFIX}/core/v2/TestGraphManager.cpp
 	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
+	${TEST_PREFIX}/core/v2/TestNodeModificationVisitor.cpp
 	${TEST_PREFIX}/core/v2/TestSimpleNodeVisitorSession.cpp
 )
 
