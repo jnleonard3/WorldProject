@@ -16,16 +16,16 @@ Node* BreadthFirstNodeVisitorController::getNextNode(unsigned long id, NodeConne
 		}
 	}
 	Node* nextNode;
-	if(siblingNodeQueue.pop(nextNode)) {
-		return nextNode;
-	} else {
-		while(childNodeQueue.pop(nextNode)) {
-			siblingNodeQueue.push(nextNode);
-		}
-		nextNode = 0;
-		if(siblingNodeQueue.pop(nextNode)) {
+	while(siblingNodeQueue.pop(nextNode)) {
+		if(visitedNodes.count(nextNode->getId()) == 0) {
 			return nextNode;
 		}
+	}
+	while(childNodeQueue.pop(nextNode)) {
+		siblingNodeQueue.push(nextNode);
+	}
+	if(siblingNodeQueue.pop(nextNode)) {
+		return nextNode;
 	}
 	return 0;
 }

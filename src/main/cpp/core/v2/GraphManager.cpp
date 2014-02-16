@@ -1,5 +1,10 @@
 #include "GraphManager.h"
+
+#include "Node.h"
 #include "NodeConnectivityData.h"
+#include "AbstractNodeVisitorController.h"
+#include "AbstractNodeVisitor.h"
+#include "NodeVisitorSession.h"
 
 NodeConnectivityRootData* connectRootNode(Node** rootNodes, int a, int b, int c, int d, int e) {
 	NodeConnectivityRootData *connectivity = new NodeConnectivityRootData(1);
@@ -27,4 +32,9 @@ GraphManager::GraphManager():currentRevision(1) {
 	rootNodes[9]->addConnectivity(connectRootNode(rootNodes, 2, 3, 4, 6, 8));
 	rootNodes[10]->addConnectivity(connectRootNode(rootNodes, 0, 1, 5, 7, 11));
 	rootNodes[11]->addConnectivity(connectRootNode(rootNodes, 2, 3, 5, 7, 10));	
+}
+
+void GraphManager::traverse(AbstractNodeVisitorController *controller, AbstractNodeVisitor *visitor) {
+	NodeVisitorSession *session = new NodeVisitorSession(currentRevision);
+	session->traverse(rootNodes[0], controller, visitor);
 }
