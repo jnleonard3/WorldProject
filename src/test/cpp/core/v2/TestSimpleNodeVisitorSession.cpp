@@ -41,7 +41,7 @@ public:
 	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
 		if(nodesVisited == 1) {
-			setNextNode(node->getSiblingNodes()[0]);
+			setNextNodeId(node->getSiblingNodes()[0]);
 		}
 	}
 };

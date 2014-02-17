@@ -7,7 +7,7 @@ class NodeConnectivityData;
 class AbstractNodeVisitorController {
 public:
 	virtual ~AbstractNodeVisitorController(){};
-	virtual Node* getNextNode(unsigned long id, NodeConnectivityData* connectivity) = 0;
+	virtual Node* getNextNode(Node *currentNode, NodeConnectivityData *connectivity) = 0;
 };
 
 #endif

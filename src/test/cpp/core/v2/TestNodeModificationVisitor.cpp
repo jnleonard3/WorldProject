@@ -34,14 +34,27 @@ protected:
 	}
 };
 
-class TestModificationVisitor : public SimpleNodeVisitor {
+class TestModificationVisitor : public NodeModificationVisitor {
 public:
 	int nodesVisited;
-	TestModificationVisitor():nodesVisited(0){}
+	TestModificationVisitor():NodeModificationVisitor(3),nodesVisited(0){}
 	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
 		if(nodesVisited == 1) {
-			setNextNode(node->getSiblingNodes()[0]);
+			setNextNodeId(node->getSiblingNodes()[0]);
+		}
+	}
+};
+
+class TestModificationModifyVisitor : public NodeModificationVisitor {
+public:
+	int nodesVisited;
+	TestModificationModifyVisitor():NodeModificationVisitor(3),nodesVisited(0){}
+	virtual void visit(ImmutableNode* node) {
+		nodesVisited += 1;
+		if(nodesVisited == 1) {
+			addChildNode(0);
+			setNextNodeId(node->getSiblingNodes()[0]);
 		}
 	}
 };
@@ -54,8 +67,10 @@ TEST_F(NodeModificationVisitorTest, TestVisiting) {
 }
 
 TEST_F(NodeModificationVisitorTest, TestModificationVisiting) {
-	TestModificationVisitor *testVisitor = new TestModificationVisitor();
+	TestModificationModifyVisitor *testVisitor = new TestModificationModifyVisitor();
 	NodeVisitorSession session(1);
 	session.traverse(one, testVisitor, testVisitor);
 	ASSERT_EQ(2, testVisitor->nodesVisited);
+	std::list<Node*> modifiedNodes = testVisitor->getModifiedNodes();
+	ASSERT_EQ(3, modifiedNodes.size());
 }

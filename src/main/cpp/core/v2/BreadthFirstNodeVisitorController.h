@@ -11,7 +11,7 @@ class BreadthFirstNodeVisitorController : public AbstractNodeVisitorController
 public:
 	BreadthFirstNodeVisitorController():siblingNodeQueue(1),childNodeQueue(1){}
 	virtual ~BreadthFirstNodeVisitorController(){}
-	virtual Node* getNextNode(unsigned long id, NodeConnectivityData* connectivity);
+	virtual Node* getNextNode(Node *currentNode, NodeConnectivityData* connectivity);
 private:
 	boost::lockfree::queue<Node*> siblingNodeQueue;
 	boost::lockfree::queue<Node*> childNodeQueue;

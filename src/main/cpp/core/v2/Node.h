@@ -18,9 +18,26 @@ public:
 	Node():id(0){};
 	Node(unsigned long id):id(id){};
 	Node(const Node& node):id(node.getId()){};
+	
 	unsigned long getId() const {return id;}
+	
+	Node* copy();
+	
 	void addConnectivity(NodeConnectivityData *connectivity);
+	NodeConnectivityData* getHeadConnectivity();
 	NodeConnectivityData* getConnectivity(unsigned long revision);
+	
+	struct CreateChildNodeResult {
+		Node *cNode;
+		Node *p1, *p2;
+		Node *s1, *s2, *s3, *s4;
+		NodeConnectivityData *cc;
+		NodeConnectivityData *p1c, *p2c;
+		NodeConnectivityData *s1c, *s2c, *s3c, *s4c;
+		void apply(unsigned long revision);
+	};
+	
+	static CreateChildNodeResult* createChildNode(unsigned long id, unsigned long revision, Node* p1, Node* p2);
 private:
 	unsigned long id;
 	boost::ptr_list<NodeConnectivityData> connectivityData;

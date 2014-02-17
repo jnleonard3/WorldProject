@@ -14,6 +14,8 @@ class NodeData {
 public:
 	NodeData(unsigned long revision):revision(revision){}
 	unsigned long getRevision() {return revision;}
+	virtual NodeData* copy(unsigned long revision) = 0;
+	virtual NodeData* copy() {return copy(revision);}
 private:
 	const unsigned long revision;
 };
