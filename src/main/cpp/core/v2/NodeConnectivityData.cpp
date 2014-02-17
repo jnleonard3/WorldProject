@@ -57,6 +57,38 @@ Node* NodeConnectivityData::getEffectiveSiblingNode(int index) {
 	}
 }
 
+void NodeConnectivityData::merge(NodeConnectivityData *other) {
+	for(int i = 0; i < getParentNodeCount(); i += 1) {
+		if(getParentNodes()[i] != 0 && other->getParentNodes()[i] != 0) {
+			if(getParentNodes()[i]->getId() != other->getParentNodes()[i]->getId()) {
+				getParentNodes()[i] = other->getParentNodes()[i];
+			}
+		} else {
+			getParentNodes()[i] = other->getParentNodes()[i];
+		}
+	}
+	
+	for(int i = 0; i < getSiblingNodeCount(); i += 1) {
+		if(getSiblingNodes()[i] != 0 && other->getSiblingNodes()[i] != 0) {
+			if(getSiblingNodes()[i]->getId() != other->getSiblingNodes()[i]->getId()) {
+				getSiblingNodes()[i] = other->getSiblingNodes()[i];
+			}
+		} else {
+			getSiblingNodes()[i] = other->getSiblingNodes()[i];
+		}
+	}
+	
+	for(int i = 0; i < getChildNodeCount(); i += 1) {
+		if(getChildNodes()[i] != 0 && other->getChildNodes()[i] != 0) {
+			if(getChildNodes()[i]->getId() != other->getChildNodes()[i]->getId()) {
+				getChildNodes()[i] = other->getChildNodes()[i];
+			}
+		} else {
+			getChildNodes()[i] = other->getChildNodes()[i];
+		}
+	}
+}
+
 NodeConnectivityChildData::NodeConnectivityChildData(unsigned long revisionId):NodeConnectivityData(revisionId) {
 	for(int i = 0; i < getParentNodeCount(); i += 1) {
 		getParentNodes()[i] = 0;

@@ -58,3 +58,23 @@ TEST_F(NodeTest, TestChildNodeApply) {
 	ASSERT_EQ(2, cc->getParentNodes()[1]->getId());
 }
 
+TEST_F(NodeTest, TestConnectChildNodeTwice) {
+	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
+	result->apply(2);
+	Node *three = one->getHeadConnectivity()->getChildNodes()[0];
+	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4,2,one,three);
+	ASSERT_EQ(4, secondResult->cNode->getId());
+	ASSERT_EQ(one, secondResult->cc->getParentNodes()[0]);
+	ASSERT_EQ(three, secondResult->cc->getParentNodes()[1]);
+	ASSERT_EQ(secondResult->cNode, secondResult->p2c->getChildNodes()[0]);
+}
+
+TEST_F(NodeTest, TestChildNodeApplyTwice) {
+	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
+	result->apply(2);
+	Node *three = one->getHeadConnectivity()->getChildNodes()[0];
+	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4,2,one,three);
+	secondResult->apply(2);
+}
+
+

@@ -32,26 +32,25 @@ NodeConnectivityData* Node::getConnectivity(unsigned long revision) {
 	return 0;
 }
 
+void updateOrCreateConnectivity(Node *node, unsigned long revision, NodeConnectivityData *newConnectivity) {
+	if(node != 0) {
+		NodeConnectivityData *head = node->getHeadConnectivity();
+		if(head->getRevision() == revision) {
+			head->merge(newConnectivity);
+		} else {
+			node->addConnectivity(newConnectivity->copy(revision));
+		}
+	}
+}
+
 void Node::CreateChildNodeResult::apply(unsigned long revision) {
 	cNode->addConnectivity(cc->copy(revision));
-	if(p1 != 0) {
-		p1->addConnectivity(p1c->copy(revision));
-	}
-	if(p2 != 0) {
-		p2->addConnectivity(p2c->copy(revision));
-	}
-	if(s1 != 0) {
-		s1->addConnectivity(s1c->copy(revision));
-	}
-	if(s2 != 0) {
-		s2->addConnectivity(s2c->copy(revision));
-	}
-	if(s3 != 0) {
-		s3->addConnectivity(s3c->copy(revision));
-	}
-	if(s4 != 0) {
-		s4->addConnectivity(s4c->copy(revision));
-	}
+	updateOrCreateConnectivity(p1, revision, p1c);
+	updateOrCreateConnectivity(p2, revision, p2c);
+	updateOrCreateConnectivity(s1, revision, s1c);
+	updateOrCreateConnectivity(s2, revision, s2c);
+	updateOrCreateConnectivity(s3, revision, s3c);
+	updateOrCreateConnectivity(s4, revision, s4c);
 }
 
 Node::CreateChildNodeResult* Node::createChildNode(unsigned long id, unsigned long revision, Node* p1, Node* p2) {

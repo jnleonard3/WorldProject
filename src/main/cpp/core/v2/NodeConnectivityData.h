@@ -39,6 +39,8 @@ public:
 	virtual void setChildNode(bool isParentIndex, int index, Node *node) = 0;
 	
 	int getChildNodeIndex(unsigned long id);
+	
+	void merge(NodeConnectivityData *other);
 private:
 };
 

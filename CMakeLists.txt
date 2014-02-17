@@ -35,6 +35,7 @@ set(UNIT_TEST_FILES
 	${TEST_PREFIX}/core/v2/TestGraphManager.cpp
 	${TEST_PREFIX}/core/v2/TestImmutableNodeFactory.cpp
 	${TEST_PREFIX}/core/v2/TestNode.cpp
+	${TEST_PREFIX}/core/v2/TestNodeConnectivityData.cpp
 	${TEST_PREFIX}/core/v2/TestNodeModificationVisitor.cpp
 	${TEST_PREFIX}/core/v2/TestSimpleNodeVisitorSession.cpp
 )
