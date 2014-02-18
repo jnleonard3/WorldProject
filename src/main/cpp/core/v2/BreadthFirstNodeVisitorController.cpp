@@ -3,8 +3,9 @@
 #include "Node.h"
 #include "NodeConnectivityData.h"
 
-Node* BreadthFirstNodeVisitorController::getNextNode(Node *currentNode, NodeConnectivityData* connectivity) {
-	visitedNodes.insert(currentNode->getId());
+Node* BreadthFirstNodeVisitorController::getNextNode(FixedNodeAccessor accessor) {
+	visitedNodes.insert(accessor.getId());
+	NodeConnectivityData* connectivity = accessor.getConnectivity();
 	for(int i = 0; i < connectivity->getSiblingNodeCount(); i += 1) {
 		if(connectivity->getSiblingNodes()[i] != 0 && visitedNodes.count(connectivity->getSiblingNodes()[i]->getId()) == 0) {
 			siblingNodeQueue.push(connectivity->getSiblingNodes()[i]);

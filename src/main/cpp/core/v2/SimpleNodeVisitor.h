@@ -17,7 +17,7 @@ class SimpleNodeVisitor : public AbstractNodeVisitor, public AbstractNodeVisitor
 public:
 	virtual ~SimpleNodeVisitor(){};
 	virtual void visit(ImmutableNode *node) = 0;
-	virtual Node* getNextNode(Node *currentNode, NodeConnectivityData *connectivity);
+	virtual Node* getNextNode(FixedNodeAccessor accessor);
 protected:
 	unsigned long getNextNodeId(){return nextNodeId;}
 	void setNextNodeId(unsigned long nextNodeId){this->nextNodeId = nextNodeId;}

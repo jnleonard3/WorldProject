@@ -2,20 +2,23 @@
 
 #include "Node.h"
 
-Node* NodeModificationVisitor::getNextNode(Node *currentNode, NodeConnectivityData *connectivity) {
+Node* NodeModificationVisitor::getOrCreateModifiedNode(Node* node) {
+	Node* modifiedNode = modifiedNodes[node->getId()];
+	if(modifiedNode == 0) {
+		modifiedNode = node->copy();
+		modifiedNodes[node->getId()] = modifiedNode;
+	}
+	return modifiedNode;
+}
+
+Node* NodeModificationVisitor::getNextNode(FixedNodeAccessor accessor) {
 	if(!actionsTaken.empty()) {
-		Node* modifiedNode = modifiedNodes[currentNode->getId()];
-		if(modifiedNode == 0) {
-			modifiedNode = currentNode->copy();
-			modifiedNodes[currentNode->getId()] = modifiedNode;
-		}
+		Node* modifiedNode = getOrCreateModifiedNode(accessor.getNode());
 		NodeConnectivityData *modifiedConnectivity = modifiedNode->getHeadConnectivity();
 		
 		ModificationAction action;
 		while(actionsTaken.pop(action)) {
 			if(action.isNodeAdded) {
-				
-			} else {
 				
 			}
 		}
@@ -23,7 +26,7 @@ Node* NodeModificationVisitor::getNextNode(Node *currentNode, NodeConnectivityDa
 	
 	Node* nextNode = modifiedNodes[getNextNodeId()];
 	if(nextNode == 0) {
-		nextNode = SimpleNodeVisitor::getNextNode(currentNode, connectivity);
+		nextNode = SimpleNodeVisitor::getNextNode(accessor);
 	}
 	return nextNode;
 }

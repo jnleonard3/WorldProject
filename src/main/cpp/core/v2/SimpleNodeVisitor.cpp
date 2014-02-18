@@ -3,12 +3,13 @@
 #include "Node.h"
 #include "NodeConnectivityData.h"
 
-Node* SimpleNodeVisitor::getNextNode(Node *currentNode, NodeConnectivityData *connectivity) {
+Node* SimpleNodeVisitor::getNextNode(FixedNodeAccessor accessor) {
 	unsigned long nextNodeId = this->nextNodeId;
 	this->nextNodeId = 0;
-	if(nextNodeId == currentNode->getId()) {
-		return currentNode;
+	if(nextNodeId == accessor.getId()) {
+		return accessor.getNode();
 	}
+	NodeConnectivityData *connectivity = accessor.getConnectivity();
 	for(int i = 0; i < connectivity->getParentNodeCount(); i += 1) {
 		if(connectivity->getParentNodes()[i] != 0 && connectivity->getParentNodes()[i]->getId() == nextNodeId) {
 			return connectivity->getParentNodes()[i];

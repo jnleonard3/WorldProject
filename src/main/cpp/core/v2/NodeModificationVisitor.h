@@ -28,12 +28,13 @@ public:
 	NodeModificationVisitor(unsigned long nextNodeId):nextNodeId(nextNodeId),modifiedNodes(),newNodes(),actionsTaken(6){}
 	virtual ~NodeModificationVisitor(){};
 	virtual void visit(ImmutableNode *node) = 0;
-	virtual Node* getNextNode(Node *currentNode, NodeConnectivityData *connectivity);
+	virtual Node* getNextNode(FixedNodeAccessor accessor);
 	std::list<Node*> getModifiedNodes();
 protected:
 	void addChildNode(int index);
 	void removeChildNode(int index);
 private:
+	Node* getOrCreateModifiedNode(Node* node);
 	unsigned long nextNodeId;
 	std::map<unsigned long, Node*> modifiedNodes;
 	std::list<Node*> newNodes;
