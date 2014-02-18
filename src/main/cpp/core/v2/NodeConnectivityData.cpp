@@ -42,18 +42,16 @@ void NodeConnectivityChildData::setChildNode(bool isParentIndex, int index, Node
 		getChildNodes()[actualIndex * 3] = node;
 	} else {
 		int actualIndex = index % 4;
-		getChildNodes()[actualIndex + 1 + (actualIndex > 1 ? 1 : 0)] = node;
+		getChildNodes()[actualIndex - 1 - (actualIndex > 3 ? 1 : 0)] = node;
 	}
 }
 
-Node* NodeConnectivityData::getEffectiveSiblingNode(int index) {
-	int totalSiblings = getParentNodeCount() + getSiblingNodeCount();
-	int modSiblings = index % totalSiblings;
-	int divSiblings = index / totalSiblings;
-	if(modSiblings == 0) {
-		return getParentNodes()[divSiblings];
+Node* NodeConnectivityChildData::getEffectiveSiblingNode(int index) {
+	int actualIndex = index % getChildNodeCount();
+	if(actualIndex % 3 == 0) {
+		return getParentNodes()[actualIndex / 3];
 	} else {
-		return getSiblingNodes()[divSiblings + modSiblings];
+		return getSiblingNodes()[actualIndex - 1 - (actualIndex > 3 ? 1 : 0)];
 	}
 }
 

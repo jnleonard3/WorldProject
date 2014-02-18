@@ -32,7 +32,7 @@ public:
 	
 	int getSiblingNodeIndex(unsigned long id);
 	
-	virtual Node* getEffectiveSiblingNode(int index);
+	virtual Node* getEffectiveSiblingNode(int index) = 0;
 	
 	virtual Node** getChildNodes() = 0;
 	int getChildNodeCount() {return getParentNodeCount() + getSiblingNodeCount();}
@@ -57,6 +57,7 @@ public:
 	virtual int getParentNodeCount() {return 2;}
 	virtual Node** getSiblingNodes() {return siblingNodes;}
 	virtual int getSiblingNodeCount() {return 4;}
+	virtual Node* getEffectiveSiblingNode(int index);
 	virtual Node** getChildNodes() {return childNodes;}
 	virtual void setChildNode(bool isParentIndex, int index, Node *node);
 private:
@@ -78,7 +79,7 @@ public:
 	virtual int getParentNodeCount() {return 0;}
 	virtual Node** getSiblingNodes() {return siblingNodes;}
 	virtual int getSiblingNodeCount() {return 5;}
-	virtual Node* getEffectiveSiblingNode(int index){return getSiblingNodes()[index];}	
+	virtual Node* getEffectiveSiblingNode(int index){return getSiblingNodes()[index%5];}	
 	virtual Node** getChildNodes() {return childNodes;}
 	virtual void setChildNode(bool isParentIndex, int index, Node *node);
 private:
