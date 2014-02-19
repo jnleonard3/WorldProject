@@ -1,5 +1,6 @@
 #include "core/v2/Node.h"
 #include "core/v2/NodeConnectivityData.h"
+#include "core/v2/NodeAccessor.h"
 
 #include "gtest/gtest.h"
 
@@ -32,7 +33,7 @@ protected:
 };
 
 TEST_F(NodeTest, TestConnectChildNode) {
-	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
+	Node::CreateChildNodeResult* result = Node::createChildNode(3,new NodeAccessor(1),one,two);
 	ASSERT_EQ(3, result->cNode->getId());
 	ASSERT_EQ(one, result->cc->getParentNodes()[0]);
 	ASSERT_EQ(two, result->cc->getParentNodes()[1]);
@@ -41,8 +42,8 @@ TEST_F(NodeTest, TestConnectChildNode) {
 }
 
 TEST_F(NodeTest, TestChildNodeApply) {
-	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
-	result->apply(2);
+	Node::CreateChildNodeResult* result = Node::createChildNode(3,new NodeAccessor(1),one,two);
+	result->apply(2, new NodeAccessor(2));
 	NodeConnectivityData *pc1 = one->getHeadConnectivity();
 	NodeConnectivityData *pc2 = two->getHeadConnectivity();
 	ASSERT_EQ(2, pc1->getRevision());
@@ -59,10 +60,10 @@ TEST_F(NodeTest, TestChildNodeApply) {
 }
 
 TEST_F(NodeTest, TestConnectChildNodeTwice) {
-	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
-	result->apply(2);
+	Node::CreateChildNodeResult* result = Node::createChildNode(3,new NodeAccessor(1),one,two);
+	result->apply(2, new NodeAccessor(2));
 	Node *three = one->getHeadConnectivity()->getChildNodes()[0];
-	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4,2,one,three);
+	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4,new NodeAccessor(2),one,three);
 	ASSERT_EQ(4, secondResult->cNode->getId());
 	ASSERT_EQ(one, secondResult->cc->getParentNodes()[0]);
 	ASSERT_EQ(three, secondResult->cc->getParentNodes()[1]);
@@ -70,11 +71,11 @@ TEST_F(NodeTest, TestConnectChildNodeTwice) {
 }
 
 TEST_F(NodeTest, TestChildNodeApplyTwice) {
-	Node::CreateChildNodeResult* result = Node::createChildNode(3,1,one,two);
-	result->apply(2);
+	Node::CreateChildNodeResult* result = Node::createChildNode(3, new NodeAccessor(1),one,two);
+	result->apply(2, new NodeAccessor(2));
 	Node *three = one->getHeadConnectivity()->getChildNodes()[0];
-	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4,2,one,three);
-	secondResult->apply(2);
+	Node::CreateChildNodeResult* secondResult = Node::createChildNode(4, new NodeAccessor(2),one,three);
+	secondResult->apply(2, new NodeAccessor(2));
 }
 
 

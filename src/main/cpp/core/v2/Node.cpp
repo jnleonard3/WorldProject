@@ -1,5 +1,7 @@
 #include "Node.h"
 
+#include "NodeAccessor.h"
+
 Node* Node::copy() {
 	Node *newNode = new Node(this->getId());
 	for (boost::ptr_list<NodeConnectivityData>::reverse_iterator iter = connectivityData.rbegin(); iter != connectivityData.rend(); iter++) {
@@ -32,36 +34,30 @@ NodeConnectivityData* Node::getConnectivity(unsigned long revision) {
 	return 0;
 }
 
-void updateOrCreateConnectivity(Node *node, unsigned long revision, NodeConnectivityData *newConnectivity) {
+void updateOrCreateConnectivity(Node *node, NodeAccessor *accessor, unsigned long revision, NodeConnectivityData *newConnectivity) {
 	if(node != 0) {
-		NodeConnectivityData *head = node->getHeadConnectivity();
-		if(head->getRevision() == revision) {
-			head->merge(newConnectivity);
+		NodeConnectivityData *connectivity = accessor->getConnectivity(node);
+		if(connectivity->getRevision() == revision) {
+			connectivity->merge(newConnectivity);
 		} else {
-			node->addConnectivity(newConnectivity->copy(revision));
+			accessor->addConnectivity(node, newConnectivity->copy(revision));
 		}
 	}
 }
 
-void Node::CreateChildNodeResult::apply(unsigned long revision) {
-	cNode->addConnectivity(cc->copy(revision));
-	updateOrCreateConnectivity(p1, revision, p1c);
-	updateOrCreateConnectivity(p2, revision, p2c);
-	updateOrCreateConnectivity(s1, revision, s1c);
-	updateOrCreateConnectivity(s2, revision, s2c);
-	updateOrCreateConnectivity(s3, revision, s3c);
-	updateOrCreateConnectivity(s4, revision, s4c);
+void Node::CreateChildNodeResult::apply(unsigned long revision, NodeAccessor *accessor) {
+	accessor->addConnectivity(cNode, cc->copy(revision));
+	updateOrCreateConnectivity(p1, accessor, revision, p1c);
+	updateOrCreateConnectivity(p2, accessor, revision, p2c);
+	updateOrCreateConnectivity(s1, accessor, revision, s1c);
+	updateOrCreateConnectivity(s2, accessor, revision, s2c);
+	updateOrCreateConnectivity(s3, accessor, revision, s3c);
+	updateOrCreateConnectivity(s4, accessor, revision, s4c);
 }
 
-Node::CreateChildNodeResult* Node::createChildNode(unsigned long id, unsigned long revision, Node* p1, Node* p2) {
-	NodeConnectivityData *pc1, *pc2;
-	if (revision == 0) {
-		pc1 = p1->getHeadConnectivity()->copy(0);
-		pc2 = p2->getHeadConnectivity()->copy(0);
-	} else {
-		pc1 = p1->getConnectivity(revision)->copy(0);
-		pc2 = p2->getConnectivity(revision)->copy(0);
-	}
+Node::CreateChildNodeResult* Node::createChildNode(unsigned long id, NodeAccessor *accessor, Node* p1, Node* p2) {
+	NodeConnectivityData *pc1 = accessor->getConnectivity(p1)->copy();
+	NodeConnectivityData *pc2 = accessor->getConnectivity(p2)->copy();
 	
 	int p1Index = pc1->getParentNodeIndex(p2->getId());
 	int s1Index = pc1->getSiblingNodeIndex(p2->getId());
@@ -69,7 +65,7 @@ Node::CreateChildNodeResult* Node::createChildNode(unsigned long id, unsigned lo
 	int p2Index = pc2->getParentNodeIndex(p1->getId());
 	int s2Index = pc2->getSiblingNodeIndex(p1->getId());		
 	
-	NodeConnectivityData *connectivity = new NodeConnectivityChildData(revision);
+	NodeConnectivityData *connectivity = new NodeConnectivityChildData(0);
 	connectivity->getParentNodes()[0] = p1;
 	connectivity->getParentNodes()[1] = p2;
 	

@@ -10,6 +10,8 @@
 #include <boost/ptr_container/ptr_list.hpp>
 #include "NodeConnectivityData.h"
 
+class NodeAccessor;
+
 /**
  * \class Node
  */
@@ -34,10 +36,10 @@ public:
 		NodeConnectivityData *cc;
 		NodeConnectivityData *p1c, *p2c;
 		NodeConnectivityData *s1c, *s2c, *s3c, *s4c;
-		void apply(unsigned long revision);
+		void apply(unsigned long revision, NodeAccessor *accessor);
 	};
 	
-	static CreateChildNodeResult* createChildNode(unsigned long id, unsigned long revision, Node* p1, Node* p2);
+	static CreateChildNodeResult* createChildNode(unsigned long id, NodeAccessor *accessor, Node* p1, Node* p2);
 private:
 	unsigned long id;
 	boost::ptr_list<NodeConnectivityData> connectivityData;
