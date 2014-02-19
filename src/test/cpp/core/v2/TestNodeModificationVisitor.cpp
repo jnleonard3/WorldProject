@@ -37,7 +37,7 @@ protected:
 class TestModificationVisitor : public NodeModificationVisitor {
 public:
 	int nodesVisited;
-	TestModificationVisitor():NodeModificationVisitor(3),nodesVisited(0){}
+	TestModificationVisitor():NodeModificationVisitor(2, 3),nodesVisited(0){}
 	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
 		if(nodesVisited == 1) {
@@ -49,7 +49,7 @@ public:
 class TestModificationModifyVisitor : public NodeModificationVisitor {
 public:
 	int nodesVisited;
-	TestModificationModifyVisitor():NodeModificationVisitor(3),nodesVisited(0){}
+	TestModificationModifyVisitor():NodeModificationVisitor(2, 3),nodesVisited(0){}
 	virtual void visit(ImmutableNode* node) {
 		nodesVisited += 1;
 		if(nodesVisited == 1) {

@@ -25,7 +25,7 @@ struct ModificationAction {
  */
 class NodeModificationVisitor : public SimpleNodeVisitor {
 public:
-	NodeModificationVisitor(unsigned long nextNodeId):nextNodeId(nextNodeId),modifiedNodes(),newNodes(),actionsTaken(6){}
+	NodeModificationVisitor(unsigned long revision, unsigned long nextNodeId);
 	virtual ~NodeModificationVisitor(){};
 	virtual void visit(ImmutableNode *node) = 0;
 	virtual Node* getNextNode(FixedNodeAccessor accessor);
@@ -34,11 +34,21 @@ protected:
 	void addChildNode(int index);
 	void removeChildNode(int index);
 private:
-	Node* getOrCreateModifiedNode(Node* node);
-	unsigned long nextNodeId;
+	class ModifiedNodeAccessor : public NodeAccessor {
+	public:
+		ModifiedNodeAccessor(unsigned long revision, std::map<unsigned long, Node*> &modifiedNodes, bool createIfMissing);
+	protected:
+		virtual Node* getNode(Node *node);
+	private:
+		std::map<unsigned long, Node*> &modifiedNodes;
+		bool createIfMissing;
+	};
+
+	unsigned long revision, nextNodeId;
 	std::map<unsigned long, Node*> modifiedNodes;
 	std::list<Node*> newNodes;
 	boost::lockfree::queue<ModificationAction> actionsTaken;
+	ModifiedNodeAccessor modifiedAccessor, createModifiedAccessor;
 };
 
 #endif

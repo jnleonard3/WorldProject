@@ -2,33 +2,46 @@
 
 #include "Node.h"
 
-Node* NodeModificationVisitor::getOrCreateModifiedNode(Node* node) {
-	Node* modifiedNode = modifiedNodes[node->getId()];
-	if(modifiedNode == 0) {
-		modifiedNode = node->copy();
-		modifiedNodes[node->getId()] = modifiedNode;
+NodeModificationVisitor::ModifiedNodeAccessor::ModifiedNodeAccessor(unsigned long revision, std::map<unsigned long, Node*> &modifiedNodes, bool createIfMissing)
+:NodeAccessor(revision),modifiedNodes(modifiedNodes),createIfMissing(createIfMissing){}
+
+Node* NodeModificationVisitor::ModifiedNodeAccessor::getNode(Node *node){
+	Node* newNode = modifiedNodes[node->getId()];
+	if(newNode == 0) {
+		if(createIfMissing) {
+			newNode = node->copy();
+			modifiedNodes[node->getId()] = newNode;
+		} else {
+			newNode = node;
+		}
 	}
-	return modifiedNode;
+	return newNode;
 }
+
+NodeModificationVisitor::NodeModificationVisitor(unsigned long revision, unsigned long nextNodeId)
+:revision(revision),nextNodeId(nextNodeId),modifiedNodes(),newNodes(),actionsTaken(6),
+modifiedAccessor(revision, modifiedNodes,false),
+createModifiedAccessor(revision, modifiedNodes,true) {}
 
 Node* NodeModificationVisitor::getNextNode(FixedNodeAccessor accessor) {
 	if(!actionsTaken.empty()) {
-		Node* modifiedNode = getOrCreateModifiedNode(accessor.getNode());
-		NodeConnectivityData *modifiedConnectivity = modifiedNode->getHeadConnectivity();
+		NodeConnectivityData* connectivity = modifiedAccessor.getConnectivity(accessor.getNode());
 		
 		ModificationAction action;
 		while(actionsTaken.pop(action)) {
 			if(action.isNodeAdded) {
-				
+				Node *sibling = connectivity->getEffectiveSiblingNode(action.index);
+				if(sibling != 0) {
+					Node::CreateChildNodeResult* result = Node::createChildNode(nextNodeId, &createModifiedAccessor, accessor.getNode(), sibling);
+					if(result != 0) {
+						result->apply(revision, &createModifiedAccessor);
+					}
+				}
 			}
 		}
 	}
 	
-	Node* nextNode = modifiedNodes[getNextNodeId()];
-	if(nextNode == 0) {
-		nextNode = SimpleNodeVisitor::getNextNode(accessor);
-	}
-	return nextNode;
+	return SimpleNodeVisitor::getNextNode(FixedNodeAccessor(modifiedAccessor, accessor.getNode()));
 }
 
 void NodeModificationVisitor::addChildNode(int index) {
