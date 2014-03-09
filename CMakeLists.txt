@@ -55,6 +55,8 @@ add_library(world_project STATIC ${SOURCE_FILES})
 install(TARGETS world_project DESTINATION lib)
 install(FILES ${HEADER_FILES} DESTINATION include)
 
+project (world_project_tests)
+
 set(TEST_DEP_LIBS
 	world_project
 	/cygdrive/d/Projects/WorldProject_Deps/gtest-1.7.0/lib/.libs/libgtest.a
@@ -70,8 +72,11 @@ set(TEST_DEP_INCLUDES
 include_directories(${TEST_DEP_INCLUDES})
 add_executable(world_project_tests ${UNIT_TEST_FILES})
 target_link_libraries(world_project_tests ${TEST_DEP_LIBS})
+add_dependencies(world_project_tests world_project)
 
 install(TARGETS world_project_tests DESTINATION bin)
+
+project (sdl_test)
 
 find_package(OpenGL REQUIRED)
 
@@ -80,6 +85,7 @@ set (OSG_DEP_LIBS
 	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/libSDL2main.a
 	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/.libs/SDL2.dll
 	${OPENGL_LIBRARIES}
+	world_project
 )
 
 set(OSG_DEP_INCLUDES
@@ -92,5 +98,6 @@ set(OSG_DEP_INCLUDES
 include_directories(${OSG_DEP_INCLUDES})
 add_executable(sdl_test ${SRC_PREFIX}/osg/SDLTest.cpp)
 target_link_libraries(sdl_test ${OSG_DEP_LIBS})
+add_dependencies(sdl_test world_project)
 
 install(TARGETS sdl_test DESTINATION bin)
