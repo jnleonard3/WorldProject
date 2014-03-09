@@ -72,3 +72,25 @@ add_executable(world_project_tests ${UNIT_TEST_FILES})
 target_link_libraries(world_project_tests ${TEST_DEP_LIBS})
 
 install(TARGETS world_project_tests DESTINATION bin)
+
+find_package(OpenGL REQUIRED)
+
+set (OSG_DEP_LIBS
+	cygwin
+	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/libSDL2main.a
+	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/.libs/SDL2.dll
+	${OPENGL_LIBRARIES}
+)
+
+set(OSG_DEP_INCLUDES
+	${SRC_PREFIX}
+	${CORE_DEP_INCLUDES}
+	${OPENGL_INCLUDE_DIRS}
+	../WorldProject_Deps/SDL2-2.0.1/include
+)
+
+include_directories(${OSG_DEP_INCLUDES})
+add_executable(sdl_test ${SRC_PREFIX}/osg/SDLTest.cpp)
+target_link_libraries(sdl_test ${OSG_DEP_LIBS})
+
+install(TARGETS sdl_test DESTINATION bin)
