@@ -1,3 +1,8 @@
 target
 *.project
 nbproject/*
+*.cbp*
+*.layout*
+Makefile
+cmake_install.cmake
+build

@@ -42,11 +42,14 @@ set(UNIT_TEST_FILES
 	${TEST_PREFIX}/core/v2/TestSimpleNodeVisitorSession.cpp
 )
 
+find_package(Boost 1.45 REQUIRED)
+
 set(CORE_DEP_LIBS
+    ${Boost_LIBRARIES}
 )
 
 set(CORE_DEP_INCLUDES
-	../WorldProject_Deps/boost_1_55_0
+	${Boost_INCLUDE_DIR}
 )
 
 include_directories("${CORE_DEP_INCLUDES}")
@@ -59,14 +62,14 @@ project (world_project_tests)
 
 set(TEST_DEP_LIBS
 	world_project
-	/cygdrive/d/Projects/WorldProject_Deps/gtest-1.7.0/lib/.libs/libgtest.a
-	/cygdrive/d/Projects/WorldProject_Deps/gtest-1.7.0/lib/.libs/libgtest_main.a
+	/usr/lib64/libgtest.so
+	/usr/lib64/libgtest_main.so
 )
 
 set(TEST_DEP_INCLUDES
 	${SRC_PREFIX}
 	${CORE_DEP_INCLUDES}
-	../WorldProject_Deps/gtest-1.7.0/include
+	/usr/include/gtest/
 )
 
 include_directories(${TEST_DEP_INCLUDES})
@@ -78,12 +81,12 @@ install(TARGETS world_project_tests DESTINATION bin)
 
 project (sdl_test)
 
+INCLUDE(FindPkgConfig)
 find_package(OpenGL REQUIRED)
+PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
 
 set (OSG_DEP_LIBS
-	cygwin
-	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/libSDL2main.a
-	/cygdrive/d/Projects/WorldProject_Deps/SDL2-2.0.1/build/.libs/SDL2.dll
+	${SDL2_LIBRARIES}
 	${OPENGL_LIBRARIES}
 	world_project
 )
@@ -92,7 +95,7 @@ set(OSG_DEP_INCLUDES
 	${SRC_PREFIX}
 	${CORE_DEP_INCLUDES}
 	${OPENGL_INCLUDE_DIRS}
-	../WorldProject_Deps/SDL2-2.0.1/include
+	${SDL2_INCLUDE_DIRS}
 )
 
 include_directories(${OSG_DEP_INCLUDES})
